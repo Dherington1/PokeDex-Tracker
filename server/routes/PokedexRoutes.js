@@ -1,8 +1,10 @@
 const express = require('express');
-const pokedexController = require('../controllers/generationToUser')
+const dexController = require('../controllers/dexController')
 
 const router = express.Router();
 
-router.post('/addGenerationToUser', pokedexController.addGenerationToUser);
-router.post('/addGenerationToUser/:userId/:generationNumber',pokedexController.addGenerationToUser);
+router.post('/addGenerationToUser', dexController.addGenerationToUser);
+router.get('/userDexData/:userId', dexController.userPokedexData);
+// router.post('/addGenerationToUser/:userId/:generationNumber',pokedexController.addGenerationToUser);
+
 module.exports = router;

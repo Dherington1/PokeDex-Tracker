@@ -30,7 +30,7 @@ const Home: React.FC = () => {
       "Pokémon Let's Go, Pikachu & Let's Go, Eevee", 
       'Pokémon Ultra Sun & Ultra Moon', 
       'Pokémon Sun & Moon',
-      'Pokémon OMEGA Ruby & ALHPA Sapphire',
+      'Pokémon OMEGA Ruby & ALPHA Sapphire',
       'Pokémon X & Y',
     ]
 

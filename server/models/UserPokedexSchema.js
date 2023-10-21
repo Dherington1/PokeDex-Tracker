@@ -24,6 +24,10 @@ const UserPokedexesSchema = new mongoose.Schema({
     ref: 'users',
     required: true
   },
+  title: {
+    type: String,
+    require: true
+  },
   pokedex: [PokemonSchema]
 });
 

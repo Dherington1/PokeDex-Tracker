@@ -5,6 +5,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+// import names for data
+import { names } from './gameNames';
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -16,18 +19,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
 
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
@@ -38,7 +29,11 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function MultipleSelectPlaceholder() {
+interface MultipleSelectProps {
+  setGenerationNumber: React.Dispatch<React.SetStateAction<number | null>>;
+}
+
+export default function MultipleSelect({setGenerationNumber }: MultipleSelectProps) {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
 
@@ -50,20 +45,25 @@ export default function MultipleSelectPlaceholder() {
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
+
+    // Find the corresponding generationNumber and set it.
+    const selectedGame = names.find(name => name.game === value);
+    if (selectedGame) {
+      setGenerationNumber(selectedGame.generationNumber);
+    }
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
+    <>
+      <FormControl sx={{ m: 1, width: '100%', mt: 0}}>
         <Select
-          multiple
           displayEmpty
           value={personName}
           onChange={handleChange}
           input={<OutlinedInput />}
           renderValue={(selected) => {
             if (selected.length === 0) {
-              return <em>Placeholder</em>;
+              return <em>Choose Game</em>;
             }
 
             return selected.join(', ');
@@ -71,20 +71,17 @@ export default function MultipleSelectPlaceholder() {
           MenuProps={MenuProps}
           inputProps={{ 'aria-label': 'Without label' }}
         >
-          <MenuItem disabled value="">
-            <em>Placeholder</em>
-          </MenuItem>
           {names.map((name) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={name.game}
+              value={name.game}
+              style={getStyles(name.game, personName, theme)}
             >
-              {name}
+              {name.game}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
-    </div>
+    </>
   );
 }

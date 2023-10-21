@@ -15,7 +15,7 @@ const PokemonSchema = new Schema({
 
 // Sub for GenerationPokedexSchem
 const GenerationSchema = new Schema({
-  gen: {
+  game: {
     type: String,
     required: true
   },
@@ -24,7 +24,7 @@ const GenerationSchema = new Schema({
 
 // Main schema for GenerationPokedex
 const GenerationPokedexSchema = new Schema({
-  generations: [GenerationSchema]
+  games: [GenerationSchema]
 });
 
 // Create the model

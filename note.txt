@@ -3,15 +3,21 @@
 
 TO DO
 front end: 
-    - create dex page 
+    - a lot of front end notifications (wrong password, needs title ... etc)
+
     - profile page
-    - page for created dex with pokemon 
-    - fetch logic for create dex 
+        - show progression bars of how complete their dexes are 
+
+    - pokeDex page 
+        - page for created dex with pokemon 
+    
+    - navBar 
+        - change when user is logged in
 
     - on register send user to create dex page
 
 back end:
-    - 
+    - delete pokeDex entry from User and generationPokemon
 
 
 

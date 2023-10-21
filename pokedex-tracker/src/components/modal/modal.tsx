@@ -1,39 +1,53 @@
 import React, { useContext, useState } from 'react';
+import axios from 'axios';
 import DarkModeContext from '../../utils/DarkModeContext';
+
+// MUI
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Container, TextField} from '@mui/material';
-import axios from 'axios';
-import GenSelectDropDown from './genSelectDropDown'
+
+// file import
+import MultipleSelect from './MultipleSelect'
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  // width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #18447d',
   boxShadow: 24,
   p: 4,
 };
 
+// used for params 
 interface BasicModalProps {
-    open: boolean;
-    handleClose: () => void;
-    userID: String; 
+  open: boolean;
+  handleClose: () => void;
+  userID: String; 
 }
 
 export default function BasicModal({ open, handleClose, userID }: BasicModalProps) {
     const darkMode = useContext(DarkModeContext);
+    const [generationNumber, setGenerationNumber] = useState<number | null>(null);
+    const [title, setTitle] = useState<String>("")
 
-
-    const addGeneration = async (userId: String, generationNumber: String) => {
+    // logic for adding fetch call to create new dex
+    const addGeneration = async (userId: String, generationNumber: number | null) => {
+      // console.log("userId: ",  userId);
+      // console.log("generationNumber: ",  generationNumber);
+      
         try {
           const response = await axios.post(`http://localhost:8080/api/v1/pokedex/addGenerationToUser`, {
+            // passed in as a param from profile 
             userId,
+            // from input on modal
+            title,
+            // sent up through the MultipleSelect.tsx
             generationNumber
           });
           console.log(response);
@@ -50,31 +64,43 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box  sx={{
+            width: {
+              xs: '90%', 
+              sm: '75%', 
+              md: '60%', 
+              lg: '20%', 
+              xl: '20%',
+            },
+            ...style, 
+          }}
+        >
 
         <h1 style={{textAlign: 'center', color: "#18447d",}}>Create New Dex</h1>
-            {/* TITLE */}
+            {/* DEX TITLE */}
             <Box 
                 sx={{ 
                     display: 'flex', 
                     flexDirection: 'column', 
                     alignItems: 'flex-start', 
                     width: '100%', 
-                    marginBottom: '8px'
+                    marginBottom: '8px',
+                    m: 1,  
+                    mt: 3, 
                 }}
             >
-                <h4 style={{ marginBottom: '0' }}>Username</h4>
+                <h4 style={{ marginBottom: '0' }}>PokeDex Name</h4>
                 <TextField 
-                    label="Username" 
+                    label="PokeDex Name" 
                     variant="outlined" 
                     fullWidth 
                     margin="none"
-                    id="username"
+                    id="PokeDexName"
                     autoComplete="off"
                     spellCheck={false}
                     required
-                    placeholder="pokemonMaster06"
-                    // onChange={(e) => setUsername(e.target.value)}
+                    placeholder="X's PokeDex "
+                    onChange={(e) => setTitle(e.target.value)}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             borderRadius: '2px',
@@ -92,7 +118,10 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
 
 
             {/* GENERATIONS */}
-            <GenSelectDropDown />
+            <h4 style={{ marginBottom: '0', marginLeft: '7px'}}>Choose Game</h4>
+            <MultipleSelect 
+              setGenerationNumber={setGenerationNumber}
+            />
 
 
 
@@ -110,7 +139,7 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
                                 borderRadius: '2px',
                             },
                         }}
-                        // onClick={(e) => addGeneration(userID, generationNumber)}
+                        onClick={(e) => addGeneration(userID, generationNumber)}
                     >
                     Create new Dex 
                     </Button>
