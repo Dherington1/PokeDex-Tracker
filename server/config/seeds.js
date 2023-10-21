@@ -4,6 +4,7 @@ const GenerationPokedex = require('../models/GenerationPokedexSchema');
 // generation pokemon imports
 const gen1Pokemon = require('./generationSeeds/gen1Seeds');
 const gen2Pokemon = require('./generationSeeds/gen2Seeds')
+const pokemonOmegaRubyAlphaSapphire = require('./generationSeeds/OmegaRuby-&-AlphaSapphire');
 
 async function connectToMongo() {
     try {
@@ -21,20 +22,19 @@ async function seedData() {
     try {
         await connectToMongo();
 
+        // this must match GenerationPokedex schema 
         const newGenerationPokedex = new GenerationPokedex({
-            generations: [
+            games: [
                 {
-                    gen: 'Gen1',
-                    pokemons: gen1Pokemon
-                },
-                {
-                    gen: 'Gen2',
-                    pokemons: gen2Pokemon
+                    game: 'Game1',
+                    pokemons: pokemonOmegaRubyAlphaSapphire
                 },
             ]
         });
+        // 653330ddba73112149d4cc52
 
         await newGenerationPokedex.save();
+
         console.log("Seed data inserted!");
         mongoose.connection.close();
     } catch(err) {

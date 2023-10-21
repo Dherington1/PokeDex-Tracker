@@ -8,16 +8,21 @@ import BasicModal from '../modal/modal'
 
 const Profile: React.FC = () => {
 
+    // user info 
     const [userName, setUsername] = useState<String>("")
     const [userID, setUserID] = useState<String>("")
 
+    // user dex info
+    const [dextitle, setDexTitle] = useState<string[]>([]);
+    const [dexData, setDexData] = useState<any[]>([]);
+
+    // for modal 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const getUserData = async () => {
         try {
-            // Retrieve the token from local
             const token = localStorage.getItem('token'); 
 
             // Add token to the Authorization header
@@ -30,38 +35,53 @@ const Profile: React.FC = () => {
             const response = await axios.get(`http://localhost:8080/api/v1/users/allUserData`, config);
             setUserID(response.data.data.user._id)
             setUsername(response.data.data.user.username);
-            console.log("userData: ", response.data.data.user);
+            
+            // get users dex data
+            getUserPokeDexData(config, response.data.data.user._id);
         } catch (error) {
             console.log("fetch user data error: ", error);
         }
     }
+    const getUserPokeDexData = async (config: object, userID: String) => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/v1/pokedex/userDexData/${userID}`, config);
+          
+          console.log("getUserPokeDexData function:", response);
+          console.log("digging: ", response.data[0].title);
+          setDexData(response.data)
+          console.log("dexData" , dexData);
+          
+          
+        } catch (error) {
+          console.log("Fetch user pokeDex data error:", error);
+        }
+      };
+      
     useEffect(() => {
         getUserData();
     }, []); 
 
 
+  
 
-    const generationNumber = '1'
-
-    const addGeneration = async (userId: String, generationNumber: String) => {
-        try {
-          const response = await axios.post(`http://localhost:8080/api/v1/pokedex/addGenerationToUser`, {
-            userId,
-            generationNumber
-          });
-          console.log(response);
-          console.log('Generation added successfully');
-        } catch (error) {
-          console.log('Error adding generation:', error);
-        }
-    };
-    
     return (
         <>
             <h1 style={{textAlign: 'center', color: "#18447d",}}>{userName}'s Profile</h1>
 
             {/* load all pokedexs users has  */}
-
+            {dexData.map((dex, index) => (
+                <div key={index}>
+                <h2>{dex.title}</h2>
+                <ul>
+                    {dex.pokedex.map((pokemon: any, i: number) => ( 
+                    <li key={i}>
+                        {/* Render the properties of each pokemon object */}
+                        {pokemon.name} (ID: {pokemon.pokemonId})
+                    </li>
+                    ))}
+                </ul>
+                </div>
+            ))}
 
 
             <Container 
@@ -83,7 +103,6 @@ const Profile: React.FC = () => {
                             },
                         }}
                         onClick={handleOpen}
-                        // onClick={(e) => addGeneration(userID, generationNumber)}
                     >
                     Create new Dex 
                     </Button>
