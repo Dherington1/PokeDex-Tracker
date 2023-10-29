@@ -4,7 +4,7 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import { Container, Box, TextField, Typography } from '@mui/material';
 import BasicModal from '../modal/modal'
-
+import ProgressBar from '../progressBar/ProgressBar';
 
 const Profile: React.FC = () => {
 
@@ -13,7 +13,6 @@ const Profile: React.FC = () => {
     const [userID, setUserID] = useState<String>("")
 
     // user dex info
-    const [dextitle, setDexTitle] = useState<string[]>([]);
     const [dexData, setDexData] = useState<any[]>([]);
 
     // for modal 
@@ -44,50 +43,50 @@ const Profile: React.FC = () => {
     }
     const getUserPokeDexData = async (config: object, userID: String) => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/v1/pokedex/userDexData/${userID}`, config);
-          
-          console.log("getUserPokeDexData function:", response);
-          console.log("digging: ", response.data[0].title);
+          const response = await axios.get(`http://localhost:8080/api/v1/pokedex/allUserDexData/${userID}`, config);
+
+          console.log("dexData" , response.data);
           setDexData(response.data)
-          console.log("dexData" , dexData);
-          
-          
         } catch (error) {
           console.log("Fetch user pokeDex data error:", error);
         }
-      };
+    };
       
     useEffect(() => {
         getUserData();
     }, []); 
 
-
+    // go to selected dex 
+    const title2Dex = (username: String, dexTitle: String, objectNumber: String) => {
+        window.location.href = `/${username}/${dexTitle}/${objectNumber}`
+    }
   
 
     return (
         <>
+            {/* current username */}
             <h1 style={{textAlign: 'center', color: "#18447d",}}>{userName}'s Profile</h1>
 
             {/* load all pokedexs users has  */}
             {dexData.map((dex, index) => (
-                <div key={index}>
-                <h2>{dex.title}</h2>
-                <ul>
-                    {dex.pokedex.map((pokemon: any, i: number) => ( 
-                    <li key={i}>
-                        {/* Render the properties of each pokemon object */}
-                        {pokemon.name} (ID: {pokemon.pokemonId})
-                    </li>
-                    ))}
-                </ul>
+                <div key={index} style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <h2 
+                        onClick={() => title2Dex(userName, dex.title, dex._id)}
+                        style={{marginBottom: '2px'}}
+                    >
+                        {dex.title}
+                    </h2>
+
+                    <ProgressBar
+                        caught={dex.totalChecked}
+                        total={dex.pokedex.length}
+                    />
+               
                 </div>
             ))}
 
-
-            <Container 
-                component="main" 
-                maxWidth="sm" 
-            >
+            {/* Button to pull up modal */}
+            <Container component="main" maxWidth="sm" >
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '25px'}} >
                     <Button 
                         variant="contained"   

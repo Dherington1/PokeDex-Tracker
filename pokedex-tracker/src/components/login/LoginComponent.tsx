@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
-import DarkModeContext from '../../utils/DarkModeContext';
 import axios from 'axios'
+import {Link} from 'react-router-dom';
+
+import DarkModeContext from '../../utils/DarkModeContext';
 
 // MUI
 import Button from '@mui/material/Button';
 import { Container, Box, TextField, Typography } from '@mui/material';
-import {Link} from 'react-router-dom';
 
 const Login: React.FC = () => {
     const darkMode = useContext(DarkModeContext);
@@ -13,8 +14,6 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
 
     const loginLogic = async () => {
-        console.log("password: " , password);
-        
         try {
             const response = await axios.post('http://localhost:8080/api/v1/users/login', {
               username,
@@ -23,9 +22,10 @@ const Login: React.FC = () => {
 
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user_id', response.data._id);
+            localStorage.setItem('currentUser', username)
 
             console.log('User logged:', response.data);
-            window.location.href = `/profile`;
+            window.location.href = `/profile/${username}`;
         } catch (error) {
             console.error('login failed:', error);
         }

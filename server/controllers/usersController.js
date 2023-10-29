@@ -30,7 +30,7 @@ exports.register = catchAsync(async (req, res, next) => {
 });
 
 
- // login a user
+// login a user
 exports.login = catchAsync(async (req, res, next) => {
     const {username, password} = req.body;
 

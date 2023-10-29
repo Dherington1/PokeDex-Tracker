@@ -31,7 +31,6 @@ async function seedData() {
                 },
             ]
         });
-        // 653330ddba73112149d4cc52
 
         await newGenerationPokedex.save();
 

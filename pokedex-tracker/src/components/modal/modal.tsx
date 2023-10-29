@@ -5,9 +5,9 @@ import DarkModeContext from '../../utils/DarkModeContext';
 // MUI
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Container, TextField} from '@mui/material';
+
 
 // file import
 import MultipleSelect from './MultipleSelect'
@@ -38,8 +38,9 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
 
     // logic for adding fetch call to create new dex
     const addGeneration = async (userId: String, generationNumber: number | null) => {
-      // console.log("userId: ",  userId);
-      // console.log("generationNumber: ",  generationNumber);
+      console.log("userId: ",  userId);
+      console.log('userId should = 653ea73dcc47cc9ee48b276d');
+      console.log("generationNumber: ",  generationNumber);
       
         try {
           const response = await axios.post(`http://localhost:8080/api/v1/pokedex/addGenerationToUser`, {
@@ -52,6 +53,9 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
           });
           console.log(response);
           console.log('Generation added successfully');
+
+          // reload users pokedexes 
+          window.location.reload();
         } catch (error) {
           console.log('Error adding generation:', error);
         }

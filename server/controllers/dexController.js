@@ -3,9 +3,8 @@ const GenerationPokedex = require('../models/GenerationPokedexSchema');
 const UserPokedexes = require('../models/UserPokedexSchema');
 const User = require('../models/UserSchema');
 
+// create a new dex for user
 exports.addGenerationToUser = async (req, res) => {
-  console.log('in generation to user');
-
   try {
     const { userId, generationNumber, title } = req.body;
     
@@ -24,8 +23,10 @@ exports.addGenerationToUser = async (req, res) => {
     // Map the target generation data to match the UserPokedexes schema
     const mappedPokemons = targetGeneration.pokemons.map(pokemon => {
       return {
-        pokemonId: Number(pokemon.number), 
+        pokemonId: pokemon.displayNumber, 
         name: pokemon.name,
+        checked: pokemon.checked,
+        dexNumber: pokemon.dexNumber
       };
     });
 
@@ -33,13 +34,13 @@ exports.addGenerationToUser = async (req, res) => {
     const newUserPokedex = await UserPokedexes.create({
       userId,
       title,
+      totalChecked: 0,
       pokedex: mappedPokemons
     });
 
     // update User's pokedexes array
     const user = await User.findById(userId);
     user.pokedexes.push(newUserPokedex._id);
-    // user.pokedexes.push(newUserPokedex);
     await user.save();
 
     res.status(200).json({ message: 'Generation added successfully' });
@@ -49,15 +50,13 @@ exports.addGenerationToUser = async (req, res) => {
 };
 
 
-
-exports.userPokedexData = async (req, res) => {
+// used on users profile page
+exports.allUserDexData = async (req, res) => {
   try {
-    console.log('in userPokedexData ');
     // Fetching all UserPokedexes documents related to a specific user
-    const userId = req.params.userId; // Assuming you are sending userId as a URL parameter
-    console.log("userId: ", userId);
+    const userId = req.params.userId; 
 
-    const userDexData = await UserPokedexes.find({ userId: userId }).select('title pokedex');
+    const userDexData = await UserPokedexes.find({ userId: userId }).select('title pokedex totalChecked');
     console.log("userDexData: ", userDexData);
 
     // Check if data exists for the user
@@ -73,3 +72,28 @@ exports.userPokedexData = async (req, res) => {
     res.status(500).json({ message: 'An error occurred', error });
   }
 };
+
+
+
+// used for a selected dex by user
+exports.selectedDexEntry = async (req, res) => {
+  try {
+    // Fetching all UserPokedexes documents related to a specific user
+    const objectId = req.params.objectId;
+
+    const selectedDex = await UserPokedexes.findById(objectId)
+    console.log(selectedDex);
+
+    if (!selectedDex) {
+      return res.status(404).json({ message: 'No pokedex data found for the user.' });
+    }
+
+    // Send back the pokedex data
+    res.status(200).json(selectedDex);
+
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred', error });
+  }
+};
+
+

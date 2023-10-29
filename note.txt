@@ -1,24 +1,21 @@
-1. ON pull from data save all data to db 
-
 
 TO DO
 front end: 
     - a lot of front end notifications (wrong password, needs title ... etc)
 
     - profile page
-        - show progression bars of how complete their dexes are 
+        - Title of pokeDex takes user to pokeDex page
 
     - pokeDex page 
         - page for created dex with pokemon 
-    
-    - navBar 
-        - change when user is logged in
-
+  
     - on register send user to create dex page
 
 back end:
-    - delete pokeDex entry from User and generationPokemon
+    - route to take users to their pokedex entry (in user controller)
 
+    - delete feature for pokeDex entry from User and generationPokemon
 
-
-pokedex 
+    ***
+    - restructure UserPokedexesSchema so that it can handle knowing how many (checked: true)
+    ***

@@ -4,10 +4,14 @@ const { Schema } = mongoose;
 // sub schema
 const PokemonSchema = new Schema({
   pokemonId: {
-    type: Number,
+    type: String,
     required: true
   },
   name: {
+    type: String,
+    required: true
+  },
+  dexNumber: {
     type: String,
     required: true
   },
@@ -28,8 +32,14 @@ const UserPokedexesSchema = new mongoose.Schema({
     type: String,
     require: true
   },
+  totalChecked: {
+    type: Number,
+    default: 0,
+    require: true
+  },
   pokedex: [PokemonSchema]
 });
+
 
 // Create the model
 const UserPokedexes = mongoose.model('UserPokedexes', UserPokedexesSchema);
