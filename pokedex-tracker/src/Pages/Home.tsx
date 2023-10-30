@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 // MUI 
 import Button from '@mui/material/Button';
 import { Container, Box, TextField, Typography } from '@mui/material';
-import {Link} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   const backgroundStyle: React.CSSProperties = {
@@ -38,7 +40,7 @@ const Home: React.FC = () => {
 
   // send users to login or register
   const handleButton = (arg: string) => {
-    window.location.href = `/${arg}`;
+    navigate(`/${arg}`);
   }
 
   // check if user is logged in
@@ -55,7 +57,7 @@ const Home: React.FC = () => {
   // send user to profile if logged in
   const handleLoggedInUser = () => {
     let currentUsername = localStorage.getItem('currentUser')
-    window.location.href = `/profile/${currentUsername}`;
+    navigate(`/profile/${currentUsername}`);
   }
 
   return (

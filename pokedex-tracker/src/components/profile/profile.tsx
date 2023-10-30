@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
-import { Container, Box, TextField, Typography } from '@mui/material';
+import { Container, Box} from '@mui/material';
 import BasicModal from '../modal/modal'
 import ProgressBar from '../progressBar/ProgressBar';
 
@@ -72,7 +72,7 @@ const Profile: React.FC = () => {
                 <div key={index} style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <h2 
                         onClick={() => title2Dex(userName, dex.title, dex._id)}
-                        style={{marginBottom: '2px'}}
+                        style={{marginBottom: '2px', cursor: 'pointer'}}
                     >
                         {dex.title}
                     </h2>

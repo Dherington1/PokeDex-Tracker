@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios'
 import {Link} from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import DarkModeContext from '../../utils/DarkModeContext';
 
 // MUI
@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { Container, Box, TextField, Typography } from '@mui/material';
 
 const Login: React.FC = () => {
+    const navigate = useNavigate();
     const darkMode = useContext(DarkModeContext);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -25,7 +26,7 @@ const Login: React.FC = () => {
             localStorage.setItem('currentUser', username)
 
             console.log('User logged:', response.data);
-            window.location.href = `/profile/${username}`;
+            navigate(`/profile/${username}`);
         } catch (error) {
             console.error('login failed:', error);
         }

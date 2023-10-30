@@ -2,6 +2,8 @@
 const GenerationPokedex = require('../models/GenerationPokedexSchema');
 const UserPokedexes = require('../models/UserPokedexSchema');
 const User = require('../models/UserSchema');
+const mongoose = require('mongoose');
+``
 
 // create a new dex for user
 exports.addGenerationToUser = async (req, res) => {
@@ -96,4 +98,47 @@ exports.selectedDexEntry = async (req, res) => {
   }
 };
 
+
+exports.checkPokemon = async (req, res) => {
+  console.log('in checked pokemon');
+  try {
+    // Retrieve values from req.params
+    const { pokedexId, pokemonId, checkedStatus } = req.params; 
+
+    // Convert the string value to boolean
+    const isCurrentlyChecked = checkedStatus === 'true';
+
+    // Toggle the status
+    let oppositeOfCheckedStatus = !isCurrentlyChecked;
+
+    // Decide the increment/decrement value based on the new status
+    const changeInTotalChecked = oppositeOfCheckedStatus ? 1 : -1;
+
+    // Find and update the specific Pokémon's checked status
+    const updatedPokedex = await UserPokedexes.findOneAndUpdate(
+      { 
+        _id: pokedexId, 
+        'pokedex._id': pokemonId 
+      }, 
+      { 
+        $set: { 'pokedex.$.checked': oppositeOfCheckedStatus },
+        $inc: { 'totalChecked': changeInTotalChecked }
+      }, 
+      {
+        new: true, 
+        upsert: false
+      }
+    );
+
+    if (!updatedPokedex) {
+      return res.status(404).json({ message: 'Pokédex or Pokémon not found' });
+    }
+
+    res.status(200).json(updatedPokedex);
+
+  } catch (error) {
+    console.error("Error occurred:", error);
+    res.status(500).json({ message: 'An error occurred', error });
+  }
+};
 

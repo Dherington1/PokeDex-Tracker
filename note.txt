@@ -4,18 +4,9 @@ front end:
     - a lot of front end notifications (wrong password, needs title ... etc)
 
     - profile page
-        - Title of pokeDex takes user to pokeDex page
-
-    - pokeDex page 
-        - page for created dex with pokemon 
+        - delete dex feature
   
     - on register send user to create dex page
 
 back end:
-    - route to take users to their pokedex entry (in user controller)
-
     - delete feature for pokeDex entry from User and generationPokemon
-
-    ***
-    - restructure UserPokedexesSchema so that it can handle knowing how many (checked: true)
-    ***

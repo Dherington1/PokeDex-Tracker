@@ -2,6 +2,7 @@ import * as React from "react";
 import { useContext, useEffect } from "react";
 import SmallDisplayNavComponent from "./smallDisplayNavComponent";
 import DarkModeContext from "../../utils/DarkModeContext";
+import { useNavigate } from 'react-router-dom';
 
 // MUI
 import AppBar from "@mui/material/AppBar";
@@ -19,28 +20,29 @@ import NightlightIcon from "@mui/icons-material/Nightlight";
 const userAccount = ["LOGIN", "REGISTER"];
 
 const Nav: React.FC = () => {
+  const navigate = useNavigate();
+
   // going to fetch logged in status from local storage
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [username, setUsername] = React.useState<String | null>('')
 
   // Dark mode
   const { darkTheme, darkMode, setDarkMode } = useContext(DarkModeContext);
-
   // send users to proper page onClick
   const handleUserAccount = (arg?: string) => {
     if (arg) {
       const lowercaseArg = arg.toLowerCase();
-      window.location.href = `/${lowercaseArg}`;
+      navigate(`/${lowercaseArg}`);
     } else {
-      window.location.href = "/";
+      navigate("/");
     }
   };
-
+  
   // for logged in users to go to their profile
   const handleUserProfile = (arg: String | null) => {
     if (arg != null) {
       const lowercaseArg = arg.toLowerCase();
-      window.location.href = `profile/${lowercaseArg}`;
+      navigate(`/profile/${lowercaseArg}`);
     } 
   }
 
@@ -61,7 +63,7 @@ const Nav: React.FC = () => {
   // logout user 
   const handleLogOut = () => {
     localStorage.clear();
-    window.location.href = '/login'
+    navigate('/login')
   }
   
 

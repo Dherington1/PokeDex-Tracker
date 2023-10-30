@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useContext, useState } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // file imports
 import DarkModeContext from '../../utils/DarkModeContext';
@@ -11,6 +12,7 @@ import Button from "@mui/material/Button";
 import { Container, Box, TextField, Typography } from "@mui/material";
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
   const darkMode = useContext(DarkModeContext);
 
   // set register variables from user
@@ -21,6 +23,7 @@ const Register: React.FC = () => {
   
   // register logic
   const registerLogic = async () => {
+    
     // Basic validation (you can make it more comprehensive)
     if (password !== confirmPassword) {
       alert("Passwords don't match");
@@ -34,7 +37,7 @@ const Register: React.FC = () => {
         password,
       });
       console.log('User registered:', response.data);
-      window.location.href = `/profile`;
+      navigate(`/profile`);
     } catch (error) {
       console.error('Registration failed:', error);
     }

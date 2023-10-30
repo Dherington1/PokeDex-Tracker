@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 // file imports
-import ImageCard from '../Cards/ImageCard';
 import ProgressBar from '../progressBar/ProgressBar';
 import MainCard from '../Cards/mainCard';
 
@@ -22,6 +21,10 @@ const SelectedDexComponent: React.FC = () => {
 
     // get variables from URL
     const { username, dexTitle, objectNumber } = useParams();
+
+    // refresh screen when pokemon is clicked
+    const [refreshFlag, setRefreshFlag] = useState(false);
+
 
     // get pokemon from selected dex
     const getDexData = async () => {
@@ -47,10 +50,34 @@ const SelectedDexComponent: React.FC = () => {
             console.log('SelectedDexComponent ERROR: ', error);
         }
     }
+    // useEffect(() => {
+    //     getDexData();
+    // }, []);
+
+    const handleCatchPokemon = async (pokedexId: String | undefined, pokemonId: String, checkedStatus: boolean) => {
+        try {
+            const token = localStorage.getItem('token'); 
+    
+            // Add token to the Authorization header
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            console.log(checkedStatus.toString()); 
+            
+            const response = await axios.put(`http://localhost:8080/api/v1/pokedex/checkPokemon/${pokedexId}/${pokemonId}/${checkedStatus.toString()}`, config)
+            if (response.status === 200) {
+                setRefreshFlag(!refreshFlag);
+            }
+
+        } catch (error) {
+            console.log('changing checked boolean error: ', error);
+        }
+    }
     useEffect(() => {
         getDexData();
-    }, []);
-
+    }, [refreshFlag]);
     
 
     return (
@@ -65,18 +92,41 @@ const SelectedDexComponent: React.FC = () => {
                     /> 
                 </div>
                
+                <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px', marginBottom: '10px'}}>
+                    <h2 style={{marginBottom: '0px'}}>
+                        001 - 030
+                    </h2>
+                </div>
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         flexWrap: 'wrap',
-                        marginTop: '35px',
                         justifyContent: 'center',
                         width: '100%'
                     }}
                 >
                     {dexData.map((poke, index) => (
-                        <MainCard pokemon={poke.name} entryNum={poke.dexNumber} displayNum={poke.pokemonId} key={index}/>
+                        <>
+                            <MainCard 
+                                pokemon={poke.name} 
+                                entryNum={poke.dexNumber} 
+                                displayNum={poke.pokemonId} 
+                                key={index} 
+                                checkStatus={poke.checked} 
+                                onClick={() => handleCatchPokemon(objectNumber, poke._id, poke.checked)}
+                            />
+                            {(index + 1) % 30 === 0 && (
+                                <>
+                                    <div style={{ width: '100%', height: '10px', marginTop: '25px', marginBottom: '25px'}}></div>
+                                    <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px'}}>
+                                        <h2 style={{marginBottom: '10px'}}>
+                                            {(index + 2) < 100 ? `0${index + 2}` : index + 2} - {(index + 31) < 100 ? `0${index + 31}` : index + 31}
+                                        </h2>
+                                    </div>
+                                </>
+                            )}
+                        </>
                     ))}
                 </Box>
             </Container>

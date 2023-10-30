@@ -1,12 +1,13 @@
-import * as React from 'react';
+import React, { useContext} from 'react';
 import './progressBar.css'
-
+import DarkModeContext from '../../utils/DarkModeContext';
 interface BasicModalProps {
     caught: number;
     total: number;
 }
 
 const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
+    const darkMode = useContext(DarkModeContext);
     const percentage = ((caught / total) * 100).toFixed(2);
   
     const innerStyle = {
@@ -15,9 +16,11 @@ const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
       backgroundColor: '#ffd924'
     };
   
+    const textStyle = darkMode ? { color: 'black' } : {};  // This line
+    
     return (
         <div className='outerStyle'>
-            <div className='numbersStyle'>
+            <div className='numbersStyle' style={textStyle}>
                 <b>{percentage}%</b> done!
                 <span>
                     {' '}
@@ -25,7 +28,7 @@ const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
                 </span>
             </div>
 
-            <div style={{width: '100%', height: '20px', backgroundColor: 'white'}}>
+            <div style={{ width: '100%', height: '20px', backgroundColor: 'white' }}>
                 <div style={innerStyle}></div>
             </div>
         </div>
