@@ -66,6 +66,9 @@ const Nav: React.FC = () => {
     navigate('/login')
   }
   
+  // choices for burger menu
+  const loggedInUserChoices = ['Profile', 'Logout'];
+  const loggedOutUserChoices = ['Login', 'Register'];
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -78,7 +81,6 @@ const Nav: React.FC = () => {
                 variant="h6"
                 noWrap
                 component="a"
-                href="#app-bar-with-responsive-menu"
                 sx={{
                   mr: 2,
                   display: { xs: "none", md: "flex" },
@@ -95,7 +97,7 @@ const Nav: React.FC = () => {
               </Typography>
 
               {/* small screen component */}
-              <SmallDisplayNavComponent />
+              <SmallDisplayNavComponent Logout={loggedOutUserChoices} LoggedIn={loggedInUserChoices} loggedInStatus={loggedIn}/>
               {/* middle spacer */}
               <Box sx={{ flexGrow: 20 }} />
 
@@ -182,7 +184,7 @@ const Nav: React.FC = () => {
               </Typography>
 
               {/* small screen component */}
-              <SmallDisplayNavComponent />
+              <SmallDisplayNavComponent Logout={loggedOutUserChoices} LoggedIn={loggedInUserChoices} loggedInStatus={loggedIn} />
               {/* middle spacer */}
               <Box sx={{ flexGrow: 20 }} />
 

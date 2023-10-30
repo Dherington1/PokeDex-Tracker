@@ -8,5 +8,11 @@ front end:
   
     - on register send user to create dex page
 
+    - 425 pixels dex list needs to go to change to list rather than boxes
+
+    - search bar feature
+
+    - hide caught pokemon feature
+
 back end:
     - delete feature for pokeDex entry from User and generationPokemon

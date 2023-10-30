@@ -1,25 +1,22 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import { useNavigate } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+interface SmallDisplayNavComponentProps {
+  Logout: string[];
+  LoggedIn: string[];
+  loggedInStatus: boolean
+}
 
-const SmallDisplayNavComponent: React.FC = () => {
+const SmallDisplayNavComponent: React.FC<SmallDisplayNavComponentProps> = ({ Logout, LoggedIn, loggedInStatus }) => {
+    const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const [loggedIn, setLoggedIn] = React.useState(false)
   
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorElNav(event.currentTarget);
@@ -35,6 +32,30 @@ const SmallDisplayNavComponent: React.FC = () => {
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
+
+    // send users to proper page onClick
+    const handleUserAccount = (arg: String | null) => {
+      console.log('in handle');
+      console.log(arg);
+      
+      if (arg === 'Login' || arg === 'Register') {
+        const lowercaseArg = arg.toLowerCase();
+        navigate(`/${lowercaseArg}`);
+
+      } else if (arg === 'Logout') {
+        localStorage.clear();
+        navigate('/login')
+
+      } else if (arg != null) {
+        const lowercaseArg = arg.toLowerCase();
+        let currentUsername = localStorage.getItem('currentUser')
+        navigate(`/${lowercaseArg}/${currentUsername}`);
+
+      } else {
+        console.log('hello');
+        navigate("/");
+      }
+    }
 
     return (
         <>
@@ -68,11 +89,30 @@ const SmallDisplayNavComponent: React.FC = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
+                {loggedInStatus ? 
+                    LoggedIn.map((userChoice: string) => (
+                      <MenuItem key={userChoice} onClick={handleCloseNavMenu}>
+                        <Typography 
+                          textAlign="center"
+                          onClick={() => handleUserAccount(userChoice)}
+                        >
+                          {userChoice}
+                        </Typography>
+                      </MenuItem>
+                    ))  
+                : 
+                    Logout.map((userChoice: string) => (
+                      <MenuItem key={userChoice} onClick={handleCloseNavMenu}>
+                        <Typography 
+                          textAlign="center"
+                          onClick={() => handleUserAccount(userChoice)}
+                        >
+                          {userChoice}
+                        </Typography>
+                      </MenuItem>
+                    ))
+                }
+
               </Menu>
             </Box>
 
@@ -83,7 +123,6 @@ const SmallDisplayNavComponent: React.FC = () => {
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -93,14 +132,11 @@ const SmallDisplayNavComponent: React.FC = () => {
                 letterSpacing: '2px',
                 color: '#18447d',
                 textDecoration: 'none',
-                // padding: '14px',
               }}
+              onClick={() => handleUserAccount}
             >
               POKEDEX TRACKER
             </Typography>
-
-          {/* user logo */}
-
         </>
     );
 }

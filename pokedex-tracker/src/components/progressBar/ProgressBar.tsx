@@ -1,4 +1,4 @@
-import React, { useContext} from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 import './progressBar.css'
 import DarkModeContext from '../../utils/DarkModeContext';
 interface BasicModalProps {
@@ -18,20 +18,55 @@ const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
   
     const textStyle = darkMode ? { color: 'black' } : {};  // This line
     
-    return (
-        <div className='outerStyle'>
-            <div className='numbersStyle' style={textStyle}>
-                <b>{percentage}%</b> done!
-                <span>
-                    {' '}
-                    (<b>{caught}</b> caught, <b>{total - caught}</b> to go)
-                </span>
-            </div>
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
 
-            <div style={{ width: '100%', height: '20px', backgroundColor: 'white' }}>
-                <div style={innerStyle}></div>
-            </div>
-        </div>
+    useEffect(() => {
+    const handleResize = () => {
+        setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+        });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup: remove the listener when the component is unmounted
+    return () => {
+        window.removeEventListener('resize', handleResize);
+    };
+    }, []);
+
+    return (
+        <>
+            {windowSize.width < 425 ? (
+                <div className='outerStyle'>
+                    <div className='numbersStyle' style={textStyle}>
+                        <b>{percentage}%</b> done!
+                    </div>
+        
+                    <div style={{ width: '100%', height: '20px', backgroundColor: 'white' }}>
+                        <div style={innerStyle}></div>
+                    </div>
+                </div>
+            ) : (
+                <div className='outerStyle'>
+                    <div className='numbersStyle' style={textStyle}>
+                        <b>{percentage}%</b> done!
+                        <span>
+                            {' '}
+                            (<b>{caught}</b> caught, <b>{total - caught}</b> to go)
+                        </span>
+                    </div>
+        
+                    <div style={{ width: '100%', height: '20px', backgroundColor: 'white' }}>
+                        <div style={innerStyle}></div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 

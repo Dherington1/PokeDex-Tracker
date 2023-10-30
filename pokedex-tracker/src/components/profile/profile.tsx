@@ -94,7 +94,10 @@ const Profile: React.FC = () => {
                             borderRadius: '2px', 
                             marginTop: '10px',
                             marginBottom: '15px',
-                            width: '40%', 
+                            width: {
+                                xs: '55%',  
+                                sm: '40%'   
+                            },
                             padding: '10px',
                             fontWeight: 'bold',
                             '& .MuiOutlinedInput-root': {

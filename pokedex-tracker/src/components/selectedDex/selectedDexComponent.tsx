@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 // file imports
 import ProgressBar from '../progressBar/ProgressBar';
 import MainCard from '../Cards/mainCard';
+import SearchBarComponent from '../searchBar/SearchBarComponent';
 
 // MUI
 import Button from '@mui/material/Button';
@@ -83,6 +84,7 @@ const SelectedDexComponent: React.FC = () => {
     return (
         <>
             <Container component="main" maxWidth="md" sx={{padding: '30px', marginTop: '35px'}}>
+                <SearchBarComponent/ >
                 <h1 style={{fontWeight: 'bold', textAlign: 'center'}}>{pokedexTitle}</h1>
 
                 <div style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
