@@ -1,10 +1,36 @@
+import { Checkbox } from '@mui/material';
 import * as React from 'react';
+import {useState} from 'react'
 
-const SearchBarComponent: React.FC = () => {
+
+interface BasicModalProps {
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleHidePokemon: (value: boolean) => void;
+}
+
+const SearchBarComponent: React.FC<BasicModalProps> = ({ handleChange, handleHidePokemon }) => {
 
     return (
         <>
-            search bar
+            <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{width: '45%'}}>
+                    <input 
+                        className='searchInput'
+                        type='search' 
+                        placeholder='Search by name'
+                        onChange={handleChange}
+                        style={{padding: '7px', width: '100%', borderRadius: '6px'}}
+                    />
+                </div>
+
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <Checkbox 
+                        onChange={(e) => handleHidePokemon(e.target.checked)}
+                    />
+
+                    <h4>Hide Caught Pokemon</h4>
+                </div>
+            </div>
         </>
     )
 }

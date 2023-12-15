@@ -75,8 +75,6 @@ exports.allUserDexData = async (req, res) => {
   }
 };
 
-
-
 // used for a selected dex by user
 exports.selectedDexEntry = async (req, res) => {
   try {
@@ -98,7 +96,28 @@ exports.selectedDexEntry = async (req, res) => {
   }
 };
 
+// used to delete a dex by user
+exports.deleteDexEntry = async (req, res) => {
+  // Fetching all UserPokedexes documents related to a specific user
+  const objectId = req.params.objectId;
+  console.log('objectId in delete function', objectId);
 
+  try {
+    const selectedDex = await UserPokedexes.findByIdAndDelete(objectId);
+  
+    if (!selectedDex) {
+      return res.status(404).json({ message: 'No pokedex data found for the user.' });
+    }
+  
+    res.status(200).json({ message: 'User dex successfully deleted.' });
+
+  } catch (err) {
+    console.error('Error in deleteDexEntry:', err);
+    res.status(500).json({ message: 'Error for deleting the dex entry.' });
+  }
+}
+
+// change checked status of pokemon 
 exports.checkPokemon = async (req, res) => {
   console.log('in checked pokemon');
   try {

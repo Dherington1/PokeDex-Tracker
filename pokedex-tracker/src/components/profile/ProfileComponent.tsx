@@ -2,11 +2,14 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
-import { Container, Box} from '@mui/material';
+import { Container, Box, styled} from '@mui/material';
 import BasicModal from '../modal/modal'
 import ProgressBar from '../progressBar/ProgressBar';
 
-const Profile: React.FC = () => {
+// mui
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+
+const ProfileComponent: React.FC = () => {
 
     // user info 
     const [userName, setUsername] = useState<String>("")
@@ -20,10 +23,10 @@ const Profile: React.FC = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    
     const getUserData = async () => {
         try {
             const token = localStorage.getItem('token'); 
-
             // Add token to the Authorization header
             const config = {
                 headers: {
@@ -32,8 +35,10 @@ const Profile: React.FC = () => {
             };
 
             const response = await axios.get(`http://localhost:8080/api/v1/users/allUserData`, config);
+            
             setUserID(response.data.data.user._id)
             setUsername(response.data.data.user.username);
+            
             
             // get users dex data
             getUserPokeDexData(config, response.data.data.user._id);
@@ -41,17 +46,18 @@ const Profile: React.FC = () => {
             console.log("fetch user data error: ", error);
         }
     }
+
+
     const getUserPokeDexData = async (config: object, userID: String) => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/v1/pokedex/allUserDexData/${userID}`, config);
+            const response = await axios.get(`http://localhost:8080/api/v1/pokedex/allUserDexData/${userID}`, config);
 
-          console.log("dexData" , response.data);
-          setDexData(response.data)
+            setDexData(response.data)
         } catch (error) {
-          console.log("Fetch user pokeDex data error:", error);
+            console.log("Fetch user pokeDex data error:", error);
         }
     };
-      
+
     useEffect(() => {
         getUserData();
     }, []); 
@@ -60,7 +66,35 @@ const Profile: React.FC = () => {
     const title2Dex = (username: String, dexTitle: String, objectNumber: String) => {
         window.location.href = `/${username}/${dexTitle}/${objectNumber}`
     }
-  
+
+    // mui styling for delete button
+    const SmallIcon = styled(DeleteForeverIcon)({
+        fontSize: '18px', 
+        color: 'red', 
+        marginLeft: '10px',
+        marginTop: '12px'
+    });
+
+    const deleteDex = async (objectNumber: String) => {
+        console.log(objectNumber);
+        try {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+    
+            const response = await axios.delete(`http://localhost:8080/api/v1/pokedex/deleteDexEntry/${objectNumber}`, config);
+            console.log('response for delete data' , response.data);
+    
+            // Handle the response here (e.g., update state or UI)
+            getUserData();
+        } catch (err) {
+            console.error('Error deleting dex entry:', err);
+        }
+    }
+
 
     return (
         <>
@@ -70,18 +104,25 @@ const Profile: React.FC = () => {
             {/* load all pokedexs users has  */}
             {dexData.map((dex, index) => (
                 <div key={index} style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h2 
-                        onClick={() => title2Dex(userName, dex.title, dex._id)}
-                        style={{marginBottom: '2px', cursor: 'pointer'}}
-                    >
-                        {dex.title}
-                    </h2>
+                    
+                    <div style={{justifyContent: 'space-between', display: 'flex',  alignItems: 'center' }}>
+                        <h2 
+                            onClick={() => title2Dex(userName, dex.title, dex._id)}
+                            style={{marginBottom: '2px', cursor: 'pointer', fontSize: '20px'}}
+                        >
+                            {dex.title} 
+                        </h2>
+
+                        <SmallIcon 
+                            onClick={() => deleteDex(dex._id)}
+                        />
+                    </div>
 
                     <ProgressBar
                         caught={dex.totalChecked}
                         total={dex.pokedex.length}
                     />
-               
+            
                 </div>
             ))}
 
@@ -116,4 +157,4 @@ const Profile: React.FC = () => {
     );
 }
 
-export default Profile;
+export default ProfileComponent;

@@ -43,16 +43,28 @@ const Home: React.FC = () => {
     navigate(`/${arg}`);
   }
 
-  // check if user is logged in
+  // Check if user is logged in and token is not expired
   const checkLoggedIn = () => {
-    let userToken = localStorage.getItem('token')
-    if (userToken !== null) {
-      setLoggedIn(true)
+    let userToken = localStorage.getItem('token');
+    if (userToken) {
+        const tokenPayload = JSON.parse(atob(userToken.split('.')[1]));
+        const expiry = tokenPayload.exp;
+        const now = new Date();
+        // Convert expiry to milliseconds and compare
+        if (expiry * 1000 > now.getTime()) {
+            setLoggedIn(true);
+        } else {
+            // Token has expired, clear it from local storage
+            localStorage.removeItem('token');
+            setLoggedIn(false);
+        }
     }
   }
-  useEffect(() => {
-    checkLoggedIn()
-  }, [])
+
+useEffect(() => {
+  checkLoggedIn();
+}, [])
+
   
   // send user to profile if logged in
   const handleLoggedInUser = () => {

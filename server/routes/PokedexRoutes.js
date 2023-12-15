@@ -7,5 +7,7 @@ router.post('/addGenerationToUser', dexController.addGenerationToUser);
 router.get('/allUserDexData/:userId', dexController.allUserDexData);
 router.get('/selectedDexEntry/:username/:dexTitle/:objectId/', dexController.selectedDexEntry)
 router.put('/checkPokemon/:pokedexId/:pokemonId/:checkedStatus', dexController.checkPokemon);
+router.delete('/deleteDexEntry/:objectId', dexController.deleteDexEntry);
+
 
 module.exports = router;

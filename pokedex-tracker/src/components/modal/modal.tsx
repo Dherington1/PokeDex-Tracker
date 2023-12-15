@@ -103,7 +103,7 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
                     autoComplete="off"
                     spellCheck={false}
                     required
-                    placeholder="X's PokeDex "
+                    placeholder="pokemon X PokeDex "
                     onChange={(e) => setTitle(e.target.value)}
                     sx={{
                         '& .MuiOutlinedInput-root': {

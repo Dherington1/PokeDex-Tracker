@@ -1,18 +1,18 @@
 
-TO DO
-front end: 
-    - a lot of front end notifications (wrong password, needs title ... etc)
+TO DO:
+    front end: 
+        - a lot of front end notifications (wrong password, needs title ... etc)
 
-    - profile page
-        - delete dex feature
-  
-    - on register send user to create dex page
+        - profile page
+            - delete dex feature
+    
+        - (or just go to profile) on register send user to create dex page 
 
-    - 425 pixels dex list needs to go to change to list rather than boxes
+        - 425 pixels dex list needs to go to change to list rather than boxes
 
-    - search bar feature
+    back end:
+        - delete feature for pokeDex entry from User and generationPokemon
+        
+        - edit feature for dex names
 
-    - hide caught pokemon feature
-
-back end:
-    - delete feature for pokeDex entry from User and generationPokemon
+        - add seeds for all generations

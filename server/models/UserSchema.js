@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
 });
 
 
-// middleware to encrpt password when it is created
+// middleware to encrypt password when it is created
 userSchema.pre('save', async function(next) {
     console.log('Pre-save middleware triggered');
     // only run this function if password is modified
