@@ -7,7 +7,7 @@ interface CardProps {
   entryNum: string | number;
 }
 
-const ImageCard: React.FC<CardProps> = ({ pokemon,  entryNum }) => {
+const BigScreenImageCard: React.FC<CardProps> = ({ pokemon,  entryNum }) => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -21,4 +21,4 @@ const ImageCard: React.FC<CardProps> = ({ pokemon,  entryNum }) => {
   );
 }
 
-export default ImageCard;
+export default BigScreenImageCard;

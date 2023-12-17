@@ -21,28 +21,52 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   
+  // error handling useStates
+  const [usedEmail, setUsedEmail] = useState<boolean>(false);
+  const [usedUsername, setUsedUsername] = useState<boolean>(false);
+  const [notSamePassowrds, setnotSamePassowrds] = useState<boolean>(false);
+
   // register logic
   const registerLogic = async () => {
     
-    // Basic validation (you can make it more comprehensive)
+    // check if passwords are the same
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
-      return;
+        setnotSamePassowrds(true);
+        return;
     }
-  
+
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/users/register', {
-        username,
-        email,
-        password,
-      });
-      console.log('User registered:', response.data);
-      navigate(`/profile`);
+        const response = await axios.post('http://localhost:8080/api/v1/users/register', {
+            username,
+            email,
+            password,
+        });
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user_id', response.data._id);
+        localStorage.setItem('currentUser', username)   
+        navigate(`/profile/${username}`);
+
     } catch (error) {
-      console.error('Registration failed:', error);
+        if (axios.isAxiosError(error) && error.response) {
+            if (error.response.data.message === "Email already exists") {
+                setUsedEmail(true);
+            } else if (error.response.data.message === 'Username already exists') {
+                setUsedUsername(true);
+            }
+            console.error(error);
+        } else {
+            // Handle unexpected errors
+            console.error('An unexpected error occurred', error);
+        }
     }
-  };
+};
   
+    // check if username length is okay
+        // must be unique
+    // make sure email was inputed 
+        // must be unique
+    // make sure password and confirm password are the same  
+        // minlength: 5
 
   return (
     <>
@@ -69,7 +93,10 @@ const Register: React.FC = () => {
                             marginBottom: '8px'
                         }}
                     >
-                        <h4 style={{ marginBottom: '0' }}>Username</h4>
+                        {!usedUsername
+                         ? (<><h4 style={{ marginBottom: '0' }}>Username</h4></>)
+                         : (<><h4 style={{ marginBottom: '0', color: 'red' }}>Username: Already taken</h4></>)
+                        }
                         <TextField 
                             label="Username" 
                             variant="outlined" 
@@ -97,6 +124,7 @@ const Register: React.FC = () => {
                         />
                     </Box>
 
+
                     {/* email */}
                     <Box 
                         sx={{ 
@@ -106,8 +134,11 @@ const Register: React.FC = () => {
                             width: '100%', 
                             marginBottom: '8px'
                         }}
-                    >
-                        <h4 style={{ marginBottom: '0' }}>Email</h4>
+                        >
+                        {!usedEmail 
+                         ? (<><h4 style={{ marginBottom: '0' }}>Email</h4></>)
+                         : (<><h4 style={{ marginBottom: '0', color: 'red' }}>Email: Already taken</h4></>)
+                        }
                         <TextField 
                             label="Email" 
                             variant="outlined" 
@@ -146,7 +177,10 @@ const Register: React.FC = () => {
                             marginBottom: '8px'
                         }}
                     >
-                    <h4 style={{ marginBottom: '0' }}>Password</h4>
+                    {!notSamePassowrds
+                        ? (<><h4 style={{ marginBottom: '0' }}>Password</h4></>)
+                        : (<><h4 style={{ marginBottom: '0', color: 'red' }}>Password: Does not match</h4></>)
+                    }
                     <TextField 
                         label="Password" 
                         variant="outlined" 
@@ -183,7 +217,10 @@ const Register: React.FC = () => {
                             marginBottom: '8px'
                         }}
                     >
-                    <h4 style={{ marginBottom: '0' }}>Confirm Password</h4>
+                    {!notSamePassowrds
+                        ? (<><h4 style={{ marginBottom: '0' }}>Confirm Password</h4></>)
+                        : (<><h4 style={{ marginBottom: '0', color: 'red' }}>Confirm Password: Does not match</h4></>)
+                    }
                     <TextField 
                         label="Confirm Password" 
                         variant="outlined" 

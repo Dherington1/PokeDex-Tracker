@@ -47,14 +47,18 @@ const ProfileComponent: React.FC = () => {
         }
     }
 
-
     const getUserPokeDexData = async (config: object, userID: String) => {
         try {
             const response = await axios.get(`http://localhost:8080/api/v1/pokedex/allUserDexData/${userID}`, config);
-
-            setDexData(response.data)
+            setDexData(response.data);
         } catch (error) {
-            console.log("Fetch user pokeDex data error:", error);
+            if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
+                // Handle the case where no Pokedex data is found
+                console.log("No Pokedex data found for user:", userID);
+                setDexData([]); // Set the state to an empty array to indicate no data
+            } else {
+                console.log("Fetch user Pokedex data error:", error);
+            }
         }
     };
 
@@ -88,7 +92,6 @@ const ProfileComponent: React.FC = () => {
             const response = await axios.delete(`http://localhost:8080/api/v1/pokedex/deleteDexEntry/${objectNumber}`, config);
             console.log('response for delete data' , response.data);
     
-            // Handle the response here (e.g., update state or UI)
             getUserData();
         } catch (err) {
             console.error('Error deleting dex entry:', err);

@@ -105,14 +105,30 @@ const SelectedDexComponent: React.FC = () => {
         setDexData(newData);
     }
     
+    // screen size
+    const useWindowSize = () => {
+        const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+        useEffect(() => {
+            const handleResize = () => {
+                setSize({ width: window.innerWidth, height: window.innerHeight });
+            };
+            window.addEventListener('resize', handleResize);
+            return () => window.removeEventListener('resize', handleResize);
+        }, []);
+        
+        return size;
+    };
+    const { width } = useWindowSize();
 
     return (
         <>
             <Container component="main" maxWidth="md" sx={{padding: '30px', marginTop: '35px'}}>
+                {/* search bar */}
                 <SearchBarComponent handleChange={change4Search} handleHidePokemon={handleHidePokemon} />
 
                 <h1 style={{fontWeight: 'bold', textAlign: 'center'}}>{pokedexTitle}</h1>
 
+                {/* progress bar */}
                 <div style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <ProgressBar 
                         caught={totalCaught}
@@ -120,6 +136,8 @@ const SelectedDexComponent: React.FC = () => {
                     /> 
                 </div>
             
+                {/* pokemon boxes start here */}
+                {width > 748 ? (
                 <Box
                     sx={{
                         display: 'flex',
@@ -131,9 +149,110 @@ const SelectedDexComponent: React.FC = () => {
                 >
 
                     {searchInput.length > 0 || hidePokemonState ? 
-                    (
-                        <>
-                            <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px', marginBottom: '15px', marginTop: '15px'}}></div>
+                        (
+                            <>
+                                <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px', marginBottom: '10px'}}>
+                                    <h2 style={{marginBottom: '0px'}}>
+                                        001 - 030
+                                    </h2>
+                                </div>
+                                    {dexData.map((poke, index) => (
+                                        <>
+                                            <MainCard 
+                                                pokemon={poke.name} 
+                                                entryNum={poke.dexNumber} 
+                                                displayNum={poke.pokemonId} 
+                                                key={poke.name} 
+                                                checkStatus={poke.checked} 
+                                                onClick={() => handleCatchPokemon(objectNumber, poke._id, poke.checked)}
+                                            />
+                                            {(index + 1) % 30 === 0 && (
+                                                <>
+                                                    <div style={{ width: '100%', height: '10px', marginTop: '25px', marginBottom: '25px'}}></div>
+                                                    <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px'}}>
+                                                        <h2 style={{marginBottom: '10px'}}>
+                                                            {(index + 2) < 100 ? `0${index + 2}` : index + 2} - {(index + 31) < 100 ? `0${index + 31}` : index + 31}
+                                                        </h2>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </>
+                                ))}
+                            </>
+                        ) : (searchInput.length < 1 ) ?  (
+                            <>
+                            <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px', marginBottom: '10px'}}>
+                                <h2 style={{marginBottom: '0px'}}>
+                                    001 - 030
+                                </h2>
+                            </div>
+                            
+                            {dexData.map((poke, index) => (
+                                <>
+                                    <MainCard 
+                                        pokemon={poke.name} 
+                                        entryNum={poke.dexNumber} 
+                                        displayNum={poke.pokemonId} 
+                                        key={poke.name} 
+                                        checkStatus={poke.checked} 
+                                        onClick={() => handleCatchPokemon(objectNumber, poke._id, poke.checked)}
+                                    />
+                                    {(index + 1) % 30 === 0 && (
+                                        <>
+                                            <div style={{ width: '100%', height: '10px', marginTop: '25px', marginBottom: '25px'}}></div>
+                                            <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px'}}>
+                                                <h2 style={{marginBottom: '10px'}}>
+                                                    {(index + 2) < 100 ? `0${index + 2}` : index + 2} - {(index + 31) < 100 ? `0${index + 31}` : index + 31}
+                                                </h2>
+                                            </div>
+                                        </>
+                                    )}
+                                </>
+                            ))}
+                        </>
+                        ) : (
+                            <>
+                            </>
+                        )
+                    }
+                </Box>
+                ) : ( 
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                            width: '100%',
+                            flexDirection: 'column'
+                        }}
+                    >
+
+                        {searchInput.length > 0 || hidePokemonState ? 
+                            (
+                                <>
+                                    <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px', marginBottom: '15px', marginTop: '15px'}}></div>
+                                        {dexData.map((poke, index) => (
+                                            <>
+                                                <MainCard 
+                                                    pokemon={poke.name} 
+                                                    entryNum={poke.dexNumber} 
+                                                    displayNum={poke.pokemonId} 
+                                                    key={poke.name} 
+                                                    checkStatus={poke.checked} 
+                                                    onClick={() => handleCatchPokemon(objectNumber, poke._id, poke.checked)}
+                                                />
+                                            </>
+                                    ))}
+                                </>
+                            ) : (searchInput.length < 1 ) ?  (
+                                <>
+                                <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px', marginBottom: '10px'}}>
+                                    <h2 style={{marginBottom: '0px'}}>
+                                        001 - 030
+                                    </h2>
+                                </div>
+                                
                                 {dexData.map((poke, index) => (
                                     <>
                                         <MainCard 
@@ -144,47 +263,26 @@ const SelectedDexComponent: React.FC = () => {
                                             checkStatus={poke.checked} 
                                             onClick={() => handleCatchPokemon(objectNumber, poke._id, poke.checked)}
                                         />
+                                        {(index + 1) % 30 === 0 && (
+                                            <>
+                                                <div style={{ width: '100%', height: '10px', marginTop: '25px', marginBottom: '25px'}}></div>
+                                                <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px'}}>
+                                                    <h2 style={{marginBottom: '10px'}}>
+                                                        {(index + 2) < 100 ? `0${index + 2}` : index + 2} - {(index + 31) < 100 ? `0${index + 31}` : index + 31}
+                                                    </h2>
+                                                </div>
+                                            </>
+                                        )}
                                     </>
-                            ))}
-                        </>
-                    ) : (searchInput.length < 1 ) ?  (
-                        <>
-                        <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px', marginBottom: '10px'}}>
-                            <h2 style={{marginBottom: '0px'}}>
-                                001 - 030
-                            </h2>
-                        </div>
-                        
-                        {dexData.map((poke, index) => (
-                            <>
-                                <MainCard 
-                                    pokemon={poke.name} 
-                                    entryNum={poke.dexNumber} 
-                                    displayNum={poke.pokemonId} 
-                                    key={poke.name} 
-                                    checkStatus={poke.checked} 
-                                    onClick={() => handleCatchPokemon(objectNumber, poke._id, poke.checked)}
-                                />
-                                {(index + 1) % 30 === 0 && (
-                                    <>
-                                        <div style={{ width: '100%', height: '10px', marginTop: '25px', marginBottom: '25px'}}></div>
-                                        <div style={{ width: '100%', textAlign: 'left', marginLeft: '6px'}}>
-                                            <h2 style={{marginBottom: '10px'}}>
-                                                {(index + 2) < 100 ? `0${index + 2}` : index + 2} - {(index + 31) < 100 ? `0${index + 31}` : index + 31}
-                                            </h2>
-                                        </div>
-                                    </>
-                                )}
+                                ))}
                             </>
-                        ))}
-                    </>
-                    ) : (
-                        <>
-                        </>
-                    )
-                
-                }
-                </Box>
+                            ) : (
+                                <>
+                                </>
+                            )
+                        }
+                    </Box>
+                )}
             </Container>
         </>
     );

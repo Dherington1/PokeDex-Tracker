@@ -4,30 +4,54 @@ const User = require('../models/UserSchema')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-// register a user
-exports.register = catchAsync(async (req, res, next) => {
-    const { username, email, password } = req.body;
 
-    // Create a new User
-    const newUser = await User.create({
-      username,
-      email,
-      password  
-    });
-  
+exports.register = catchAsync(async (req, res, next) => {
+  const { username, email, password } = req.body;
+
+  User.create({ username, email, password })
+  .then(user => {
     // Create JWT
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN
     });
-  
+
     res.status(201).json({
       status: 'success',
       token,
       data: {
-        user: newUser
+        user: user
       }
     });
+    
+  })
+  .catch(err => {
+    if (err.code === 11000) {
+      // Check which fields are causing the unique constraint violation
+      const isEmailInUse = 'email' in err.keyValue;
+      const isUsernameInUse = 'username' in err.keyValue;
+      let message = '';
+
+      if (isEmailInUse && isUsernameInUse) {
+          // Both email and username are in use
+          message = 'Both email and username already exist';
+      } else if (isEmailInUse) {
+          // Only email is in use
+          message = 'Email already exists';
+      } else if (isUsernameInUse) {
+          // Only username is in use
+          message = 'Username already exists';
+      }
+
+      return res.status(400).json({
+          status: 'fail',
+          message: message
+      });
+    }
+  });
 });
+
+
+
 
 
 // login a user
@@ -38,20 +62,20 @@ exports.login = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ username }).select('+password'); 
 
     if (!user) {
-            return res.status(404).json({
-            status: 'fail',
-            message: 'User not found'
-        });
+        return res.status(404).json({
+        status: 'fail',
+        message: 'User not found'
+      });
     }
 
     // Compare passwords
     const isCorrectPassword = await bcrypt.compare(password, user.password);
 
     if (!isCorrectPassword) {
-            return res.status(401).json({
-            status: 'fail',
-            message: 'Incorrect password'
-        });
+      return res.status(401).json({
+        status: 'fail',
+        message: 'Incorrect password'
+      });
     }
 
     // Create JWT token

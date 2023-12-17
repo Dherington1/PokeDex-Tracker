@@ -26,8 +26,8 @@ const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
     useEffect(() => {
     const handleResize = () => {
         setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight
+            width: window.innerWidth,
+            height: window.innerHeight
         });
     };
 

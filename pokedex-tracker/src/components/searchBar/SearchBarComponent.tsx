@@ -1,7 +1,6 @@
 import { Checkbox } from '@mui/material';
 import * as React from 'react';
-import {useState} from 'react'
-
+import './searchBar.css'
 
 interface BasicModalProps {
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,7 +12,7 @@ const SearchBarComponent: React.FC<BasicModalProps> = ({ handleChange, handleHid
     return (
         <>
             <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{width: '45%'}}>
+                <div className='inputHolder' >
                     <input 
                         className='searchInput'
                         type='search' 

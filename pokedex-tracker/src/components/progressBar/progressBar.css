@@ -1,6 +1,6 @@
 .outerStyle {
   position: relative;
-  width: 50%;
+  width: 55%;
   height: 30px;
   background-color: #fff;
   border: 2px solid #ffd924;
@@ -19,21 +19,10 @@
   height: 30px;
 }
 
-/* Media query for screens smaller than 768px */
-@media (max-width: 768px) {
-  .outerStyle {
-    width: 80%;
-  }
-  .numbersStyle {
-    font-size: 10px;
-    padding: 5px;
-  }
-}
-
 /* Media query for screens smaller than 992px (vertical monitors) */
 @media (max-width: 992px) {
   .outerStyle {
-    width: 60%;
+    width: 45%;
   }
   .numbersStyle {
     font-size: 11px;
@@ -44,11 +33,23 @@
 /* Media query for screens larger than 1200px */
 @media (min-width: 1200px) {
   .outerStyle {
-    width: 40%;
+    width: 45%;
   }
   .numbersStyle {
     font-size: 13px;
     padding: 3px;
   }
 }
-  
+
+/* Media query for screens smaller than 768px */
+@media (max-width: 768px) {
+  .outerStyle {
+    width: 85%;
+  }
+  .numbersStyle {
+    font-size: 10px;
+    padding: 5px;
+  }
+}
+
+/* at 465 width make bar bigger */
