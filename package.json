@@ -1,0 +1,27 @@
+{
+  "name": "pokedex-tracker",
+  "version": "1.0.0",
+  "description": "track player caught pokemon progression",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
+    "install": "cd server && npm install && cd ../client && npm install",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dherington1/PokeDex-Tracker.git"
+  },
+  "author": "Dherington1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dherington1/PokeDex-Tracker/issues"
+  },
+  "homepage": "https://github.com/Dherington1/PokeDex-Tracker#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
