@@ -1,0 +1,55 @@
+.outerStyle {
+  position: relative;
+  width: 55%;
+  height: 30px;
+  background-color: #fff;
+  border: 2px solid #ffd924;
+}
+
+.numbersStyle {
+  position: absolute;
+  width: 100%;
+  padding: 2px;
+  text-align: center;
+  font-family: "Montserrat", "Helvetica", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  height: 30px;
+}
+
+/* Media query for screens smaller than 992px (vertical monitors) */
+@media (max-width: 992px) {
+  .outerStyle {
+    width: 45%;
+  }
+  .numbersStyle {
+    font-size: 11px;
+    padding: 5px;
+  }
+}
+
+/* Media query for screens larger than 1200px */
+@media (min-width: 1200px) {
+  .outerStyle {
+    width: 45%;
+  }
+  .numbersStyle {
+    font-size: 13px;
+    padding: 3px;
+  }
+}
+
+/* Media query for screens smaller than 768px */
+@media (max-width: 768px) {
+  .outerStyle {
+    width: 85%;
+  }
+  .numbersStyle {
+    font-size: 10px;
+    padding: 5px;
+  }
+}
+
+/* at 465 width make bar bigger */

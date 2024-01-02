@@ -13,6 +13,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Profile from './Pages/Profile';
+import SelectedDex from './Pages/selectedDex';
 
 const App: FC = () => {
 
@@ -40,7 +41,8 @@ const App: FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:username" element={<Profile />} />
+          <Route path="/:username/:dexTitle/:objectNumber" element={<SelectedDex />} />
         </Routes>
       </Router>
     </ThemeProvider>

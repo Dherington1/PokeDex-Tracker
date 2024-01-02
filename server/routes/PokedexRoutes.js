@@ -4,7 +4,10 @@ const dexController = require('../controllers/dexController')
 const router = express.Router();
 
 router.post('/addGenerationToUser', dexController.addGenerationToUser);
-router.get('/userDexData/:userId', dexController.userPokedexData);
-// router.post('/addGenerationToUser/:userId/:generationNumber',pokedexController.addGenerationToUser);
+router.get('/allUserDexData/:userId', dexController.allUserDexData);
+router.get('/selectedDexEntry/:username/:dexTitle/:objectId/', dexController.selectedDexEntry)
+router.put('/checkPokemon/:pokedexId/:pokemonId/:checkedStatus', dexController.checkPokemon);
+router.delete('/deleteDexEntry/:objectId', dexController.deleteDexEntry);
+
 
 module.exports = router;

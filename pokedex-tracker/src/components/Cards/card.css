@@ -1,0 +1,4 @@
+#card:hover {
+    border: 1.5px #ffd924 solid;
+    cursor: pointer;
+}

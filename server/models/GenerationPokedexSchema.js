@@ -7,9 +7,17 @@ const PokemonSchema = new Schema({
     type: String,
     required: true
   },
-  number: {
+  displayNumber: {
     type: String,
     required: true
+  },
+  dexNumber: {
+    type: String,
+    required: true
+  },
+  checked: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -18,6 +26,10 @@ const GenerationSchema = new Schema({
   game: {
     type: String,
     required: true
+  }, 
+  totalChecked: {
+    type: Number,
+    default: 0
   },
   pokemons: [PokemonSchema]
 });

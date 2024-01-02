@@ -2,9 +2,13 @@ const mongoose = require('mongoose');
 const GenerationPokedex = require('../models/GenerationPokedexSchema');
 
 // generation pokemon imports
-const gen1Pokemon = require('./generationSeeds/gen1Seeds');
-const gen2Pokemon = require('./generationSeeds/gen2Seeds')
 const pokemonOmegaRubyAlphaSapphire = require('./generationSeeds/OmegaRuby-&-AlphaSapphire');
+const pokemonMoonSun = require('./generationSeeds/Moon-&-Sun');
+const pokemonUltraMoonSun = require('./generationSeeds/UltraMoon-&-UltraSun');
+const LetsGoPikachuEevee = require('./generationSeeds/LetsGoPikachuEevee');
+const SwordShield = require('./generationSeeds/Sword-&-Shield');
+const LegendsArceus = require('./generationSeeds/LegendsArceus');
+const ScarletViolet = require('./generationSeeds/ScarletViolet');
 
 async function connectToMongo() {
     try {
@@ -22,16 +26,38 @@ async function seedData() {
     try {
         await connectToMongo();
 
-        // this must match GenerationPokedex schema 
         const newGenerationPokedex = new GenerationPokedex({
             games: [
                 {
                     game: 'Game1',
                     pokemons: pokemonOmegaRubyAlphaSapphire
                 },
+                {
+                    game: 'Game2',
+                    pokemons: pokemonMoonSun
+                },
+                {
+                    game: 'Game3',
+                    pokemons: pokemonUltraMoonSun
+                },
+                {
+                    game: 'Game4',
+                    pokemons: LetsGoPikachuEevee
+                },
+                {
+                    game: 'Game5',
+                    pokemons: SwordShield
+                },
+                {
+                    game: 'Game6',
+                    pokemons: LegendsArceus
+                },
+                {
+                    game: 'Game7',
+                    pokemons: ScarletViolet
+                }
             ]
         });
-        // 653330ddba73112149d4cc52
 
         await newGenerationPokedex.save();
 

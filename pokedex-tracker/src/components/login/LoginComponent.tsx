@@ -1,32 +1,40 @@
 import React, { useContext, useState } from 'react';
-import DarkModeContext from '../../utils/DarkModeContext';
 import axios from 'axios'
+import {Link} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import DarkModeContext from '../../utils/DarkModeContext';
 
 // MUI
 import Button from '@mui/material/Button';
 import { Container, Box, TextField, Typography } from '@mui/material';
-import {Link} from 'react-router-dom';
 
 const Login: React.FC = () => {
+    const navigate = useNavigate();
     const darkMode = useContext(DarkModeContext);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    // if user login was good 
+    const [okayUser, setOkayUser] =  useState<boolean>(true);
 
     const loginLogic = async () => {
-        console.log("password: " , password);
-        
         try {
             const response = await axios.post('http://localhost:8080/api/v1/users/login', {
-              username,
-              password,
+                username,
+                password,
             });
+
+            if(!response) {
+                setOkayUser(false);
+            }
 
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user_id', response.data._id);
+            localStorage.setItem('currentUser', username)
 
             console.log('User logged:', response.data);
-            window.location.href = `/profile`;
+            navigate(`/profile/${username}`);
         } catch (error) {
+            setOkayUser(false);
             console.error('login failed:', error);
         }
     }
@@ -45,6 +53,18 @@ const Login: React.FC = () => {
                     <Typography component="h1" variant="h5" sx={{color: '#18447d', fontWeight: 'bold'}}>
                         Login
                     </Typography>
+
+                    {!okayUser ? 
+                        (
+                            <>
+                                <div style={{}}>
+                                    <p style={{color: 'red'}}>
+                                        Login failed, incorrect username or password.
+                                    </p>
+                                </div>
+                            </>
+                        ) : (<></>)
+                    }
 
 
                     {/* username */}
