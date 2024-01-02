@@ -133,7 +133,7 @@ const SmallDisplayNavComponent: React.FC<SmallDisplayNavComponentProps> = ({ Log
                 color: '#18447d',
                 textDecoration: 'none',
               }}
-              onClick={() => handleUserAccount}
+              onClick={() => handleUserAccount(null)}
             >
               POKEDEX TRACKER
             </Typography>

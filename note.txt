@@ -1,7 +1,7 @@
 
 TO DO:
     front end: 
-
+        - profile page better looking
 
     back end:
         - edit feature for dex names

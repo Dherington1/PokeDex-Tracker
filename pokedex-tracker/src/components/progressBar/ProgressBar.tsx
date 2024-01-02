@@ -16,7 +16,7 @@ const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
       backgroundColor: '#ffd924'
     };
   
-    const textStyle = darkMode ? { color: 'black' } : {};  // This line
+    const textStyle = darkMode ? { color: 'black' } : {}; 
     
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
@@ -33,7 +33,6 @@ const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup: remove the listener when the component is unmounted
     return () => {
         window.removeEventListener('resize', handleResize);
     };
@@ -44,7 +43,7 @@ const ProgressBar: React.FC<BasicModalProps> = ({ caught, total }) => {
             {windowSize.width < 425 ? (
                 <div className='outerStyle'>
                     <div className='numbersStyle' style={textStyle}>
-                        <b>{percentage}%</b> done!
+                        <b>{caught}</b> caught, <b>{total - caught}</b> to go
                     </div>
         
                     <div style={{ width: '100%', height: '20px', backgroundColor: 'white' }}>

@@ -101,33 +101,36 @@ const ProfileComponent: React.FC = () => {
 
     return (
         <>
-            {/* current username */}
-            <h1 style={{textAlign: 'center', color: "#18447d",}}>{userName}'s Profile</h1>
+            <Container component="main" maxWidth="lg" >
+                {/* current username */}
+                <h1 style={{textAlign: 'center', color: "#18447d",}}>{userName}'s Profile</h1>
 
-            {/* load all pokedexs users has  */}
-            {dexData.map((dex, index) => (
-                <div key={index} style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    
-                    <div style={{justifyContent: 'space-between', display: 'flex',  alignItems: 'center' }}>
-                        <h2 
-                            onClick={() => title2Dex(userName, dex.title, dex._id)}
-                            style={{marginBottom: '2px', cursor: 'pointer', fontSize: '20px'}}
-                        >
-                            {dex.title} 
-                        </h2>
+                {/* load all pokedexs users has  */}
+                {dexData.map((dex, index) => (
+                    <div key={index} style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        
+                        <div style={{justifyContent: 'space-between', display: 'flex',  alignItems: 'center' }}>
+                            <h2 
+                                onClick={() => title2Dex(userName, dex.title, dex._id)}
+                                style={{marginBottom: '6px', cursor: 'pointer', fontSize: '20px'}}
+                            >
+                                {dex.title} 
+                            </h2>
 
-                        <SmallIcon 
-                            onClick={() => deleteDex(dex._id)}
+                            <SmallIcon 
+                                sx={{cursor: 'pointer'}}
+                                onClick={() => deleteDex(dex._id)}
+                            />
+                        </div>
+
+                        <ProgressBar
+                            caught={dex.totalChecked}
+                            total={dex.pokedex.length}
                         />
+                
                     </div>
-
-                    <ProgressBar
-                        caught={dex.totalChecked}
-                        total={dex.pokedex.length}
-                    />
-            
-                </div>
-            ))}
+                ))}
+            </Container>
 
             {/* Button to pull up modal */}
             <Container component="main" maxWidth="sm" >
