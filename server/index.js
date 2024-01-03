@@ -3,6 +3,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const userRoutes = require('./routes/UserRoutes');
 const pokedexRoutes = require('./routes/PokedexRoutes')
@@ -41,7 +42,14 @@ app.get('/', (req, res) => res.send('Hello World from overview /'));
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/pokedex', pokedexRoutes);
 
-
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+  
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+  }
 
 async function connectToMongo() {
     try {
