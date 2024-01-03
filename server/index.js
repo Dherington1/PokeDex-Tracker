@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 const userRoutes = require('./routes/UserRoutes');
 const pokedexRoutes = require('./routes/PokedexRoutes')
@@ -21,44 +22,45 @@ const client = new MongoClient(uri, {
 
 const app = express();
 dotenv.config({ path: '.env' });
-const cookieParser = require('cookie-parser');
 
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
     next();
 });
 
-const PORT = process.env.PORT || 8080;
 
 // Enable CORS for all routes
 app.use(cors());
-
 // Middleware to parse JSON request bodies
 app.use(express.json());
+app.use(cookieParser());
 
-app.get('/', (req, res) => res.send('Hello World from overview /'));
+const PORT = process.env.PORT || 8080;
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/build')));
+    
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    });
+}
+
+// Serve static assets in production
+app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
 // routes.
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/pokedex', pokedexRoutes);
 
-// Serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/build')));
-    // app.get('*', (req, res) => {
-    //     res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
-    // });
-}
-  
 
 async function connectToMongo() {
     try {
         await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true
         });
         console.log("Successfully connected to MongoDB using Mongoose!");
-
+        
         app.listen(PORT, () => {
             console.log(`Pokedex app listening at http://localhost:${PORT}`);
         });
