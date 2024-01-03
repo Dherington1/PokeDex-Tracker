@@ -69,4 +69,5 @@ async function connectToMongo() {
     }
 }
 
+
 connectToMongo().catch(console.dir);
