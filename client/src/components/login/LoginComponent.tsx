@@ -17,8 +17,9 @@ const Login: React.FC = () => {
     const [okayUser, setOkayUser] =  useState<boolean>(true);
 
     const loginLogic = async () => {
+        const baseUrl = process.env.REACT_APP_API_BASE_URL;
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/users/login', {
+            const response = await axios.post(`${baseUrl}/api/v1/users/login`, {
                 username,
                 password,
             });

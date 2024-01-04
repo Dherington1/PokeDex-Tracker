@@ -28,7 +28,8 @@ const Register: React.FC = () => {
 
   // register logic
   const registerLogic = async () => {
-    
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
     // check if passwords are the same
     if (password !== confirmPassword) {
         setnotSamePassowrds(true);
@@ -36,7 +37,7 @@ const Register: React.FC = () => {
     }
 
     try {
-        const response = await axios.post('http://localhost:8080/api/v1/users/register', {
+        const response = await axios.post(`${baseUrl}/api/v1/users/register`, {
             username,
             email,
             password,
