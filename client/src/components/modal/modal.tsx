@@ -38,12 +38,10 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
 
     // logic for adding fetch call to create new dex
     const addGeneration = async (userId: String, generationNumber: number | null) => {
-      console.log("userId: ",  userId);
-      console.log('userId should = 653ea73dcc47cc9ee48b276d');
-      console.log("generationNumber: ",  generationNumber);
-      
+
+      const baseUrl = process.env.REACT_APP_API_BASE_URL;
         try {
-          const response = await axios.post(`http://localhost:8080/api/v1/pokedex/addGenerationToUser`, {
+          const response = await axios.post(`${baseUrl}/api/v1/pokedex/addGenerationToUser`, {
             // passed in as a param from profile 
             userId,
             // from input on modal

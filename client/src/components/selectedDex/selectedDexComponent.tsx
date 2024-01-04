@@ -45,6 +45,9 @@ const SelectedDexComponent: React.FC = () => {
     // refresh screen when pokemon is clicked
     const [refreshFlag, setRefreshFlag] = useState(false);
 
+    // URL for fetches
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
     // get pokemon from selected dex
     const getDexData = async () => {
         try {
@@ -56,7 +59,7 @@ const SelectedDexComponent: React.FC = () => {
                     Authorization: `Bearer ${token}`
                 }
             };
-            const response = await axios.get(`http://localhost:8080/api/v1/pokedex/selectedDexEntry/${username}/${dexTitle}/${objectNumber}`, config);
+            const response = await axios.get(`${baseUrl}/api/v1/pokedex/selectedDexEntry/${username}/${dexTitle}/${objectNumber}`, config);
 
             setOriginalDexData(response.data.pokedex); 
             setDexData(response.data.pokedex);   
@@ -83,7 +86,7 @@ const SelectedDexComponent: React.FC = () => {
             };
             console.log(checkedStatus.toString()); 
             
-            const response = await axios.put(`http://localhost:8080/api/v1/pokedex/checkPokemon/${pokedexId}/${pokemonId}/${checkedStatus.toString()}`, config)
+            const response = await axios.put(`${baseUrl}/api/v1/pokedex/checkPokemon/${pokedexId}/${pokemonId}/${checkedStatus.toString()}`, config)
             if (response.status === 200) {
                 setSearchInput('');
                 setRefreshFlag(!refreshFlag);

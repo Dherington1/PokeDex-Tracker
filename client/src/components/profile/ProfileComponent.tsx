@@ -23,7 +23,9 @@ const ProfileComponent: React.FC = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    
+    // URL for fetches
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
     const getUserData = async () => {
         try {
             const token = localStorage.getItem('token'); 
@@ -34,7 +36,7 @@ const ProfileComponent: React.FC = () => {
                 }
             };
 
-            const response = await axios.get(`http://localhost:8080/api/v1/users/allUserData`, config);
+            const response = await axios.get(`${baseUrl}/api/v1/users/allUserData`, config);
             
             setUserID(response.data.data.user._id)
             setUsername(response.data.data.user.username);
@@ -49,7 +51,7 @@ const ProfileComponent: React.FC = () => {
 
     const getUserPokeDexData = async (config: object, userID: String) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/pokedex/allUserDexData/${userID}`, config);
+            const response = await axios.get(`${baseUrl}/api/v1/pokedex/allUserDexData/${userID}`, config);
             setDexData(response.data);
         } catch (error) {
             if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
@@ -89,7 +91,7 @@ const ProfileComponent: React.FC = () => {
                 }
             };
     
-            const response = await axios.delete(`http://localhost:8080/api/v1/pokedex/deleteDexEntry/${objectNumber}`, config);
+            const response = await axios.delete(`${baseUrl}/api/v1/pokedex/deleteDexEntry/${objectNumber}`, config);
             console.log('response for delete data' , response.data);
     
             getUserData();
