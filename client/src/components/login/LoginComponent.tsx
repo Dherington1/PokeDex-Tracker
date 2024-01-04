@@ -27,12 +27,11 @@ const Login: React.FC = () => {
             if(!response) {
                 setOkayUser(false);
             }
-
+            
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user_id', response.data._id);
+            localStorage.setItem('user_id', response.data.data.user._id);
             localStorage.setItem('currentUser', username)
 
-            console.log('User logged:', response.data);
             navigate(`/profile/${username}`);
         } catch (error) {
             setOkayUser(false);

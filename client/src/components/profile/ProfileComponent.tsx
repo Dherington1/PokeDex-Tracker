@@ -41,9 +41,9 @@ const ProfileComponent: React.FC = () => {
             setUserID(response.data.data.user._id)
             setUsername(response.data.data.user.username);
             
-            
             // get users dex data
             getUserPokeDexData(config, response.data.data.user._id);
+            
         } catch (error) {
             console.log("fetch user data error: ", error);
         }
