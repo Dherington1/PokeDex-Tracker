@@ -3,7 +3,8 @@ const GenerationPokedex = require('../models/GenerationPokedexSchema');
 const UserPokedexes = require('../models/UserPokedexSchema');
 const User = require('../models/UserSchema');
 const mongoose = require('mongoose');
-``
+
+//  https://pokedex-tracker.onrender.com/api/v1/pokedex/addGenerationToUser
 
 // create a new dex for user
 exports.addGenerationToUser = async (req, res) => {

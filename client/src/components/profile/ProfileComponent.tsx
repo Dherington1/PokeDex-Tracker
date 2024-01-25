@@ -12,7 +12,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 const ProfileComponent: React.FC = () => {
 
     // user info 
-    const [userName, setUsername] = useState<String>("")
+    const [userName, setUsername] = useState<String | null>('')
     const [userID, setUserID] = useState<String>("")
 
     // user dex info
@@ -28,6 +28,7 @@ const ProfileComponent: React.FC = () => {
 
     const getUserData = async () => {
         try {
+            const currentUsername = localStorage.getItem('currentUser');
             const token = localStorage.getItem('token'); 
             // Add token to the Authorization header
             const config = {
@@ -38,8 +39,11 @@ const ProfileComponent: React.FC = () => {
 
             const response = await axios.get(`${baseUrl}/api/v1/users/allUserData`, config);
             
+            console.log('response.data.data.user: ' , response.data.data.user);
+            console.log('response.data.data.user._id: ', response.data.data.user._id);
+            
             setUserID(response.data.data.user._id)
-            setUsername(response.data.data.user.username);
+            setUsername(currentUsername);
             
             // get users dex data
             getUserPokeDexData(config, response.data.data.user._id);
@@ -69,7 +73,7 @@ const ProfileComponent: React.FC = () => {
     }, []); 
 
     // go to selected dex 
-    const title2Dex = (username: String, dexTitle: String, objectNumber: String) => {
+    const title2Dex = (username: String|null, dexTitle: String, objectNumber: String) => {
         window.location.href = `/${username}/${dexTitle}/${objectNumber}`
     }
 
