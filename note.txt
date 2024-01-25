@@ -1,8 +1,9 @@
 
 TO DO:
     front end: 
-        - profile page better looking
+        - check modal on Iphone 14 pro max view
 
     back end:
-        - edit feature for dex names
+        - check to see if create dex is live on deployed site 
+        - see why it takes so long to create a live dex on deployed site
 

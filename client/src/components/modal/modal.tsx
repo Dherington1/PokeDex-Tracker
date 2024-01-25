@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import DarkModeContext from '../../utils/DarkModeContext';
-
 // MUI
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
+import CircularProgress from '@mui/material/CircularProgress'; 
 import { Container, TextField} from '@mui/material';
 
 
@@ -35,6 +35,7 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
     const darkMode = useContext(DarkModeContext);
     const [generationNumber, setGenerationNumber] = useState<number | null>(null);
     const [title, setTitle] = useState<string>("")
+    const [isLoading, setIsLoading] = useState(false);
 
     // logic for adding fetch call to create new dex
     const addGeneration = async (userId: string | null, generationNumber: number | null) => {
@@ -43,6 +44,8 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
         console.error("UserID or GenerationNumber is null");
         return; 
       }
+
+      setIsLoading(true);
 
       const baseUrl = process.env.REACT_APP_API_BASE_URL;
         try {
@@ -61,6 +64,8 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
           window.location.reload();
         } catch (error) {
           console.log('Error adding generation:', error);
+        } finally {
+          setIsLoading(false); 
         }
     };
 
@@ -132,26 +137,31 @@ export default function BasicModal({ open, handleClose, userID }: BasicModalProp
 
 
 
-            {/* BUTTON */} <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '25px'}} >
+            {/* BUTTON */} 
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '25px'}} >
+                  {isLoading ? (
+                    <CircularProgress /> 
+                  ) : (
                     <Button 
                         variant="contained"   
                         sx={{
-                            borderRadius: '2px', 
-                            marginTop: '10px',
-                            marginBottom: '15px',
-                            width: '55%', 
-                            padding: '10px',
-                            fontWeight: 'bold',
-                            '& .MuiOutlinedInput-root': {
-                                borderRadius: '2px',
-                            },
+                          borderRadius: '2px', 
+                          marginTop: '10px',
+                          marginBottom: '15px',
+                          width: '55%', 
+                          padding: '10px',
+                          fontWeight: 'bold',
+                          '& .MuiOutlinedInput-root': {
+                            borderRadius: '2px',
+                          },
                         }}
                         onClick={(e) => addGeneration(userID, generationNumber)}
                     >
                     Create new Dex 
                     </Button>
-                </Box>
-        </Box>
+                  )}
+              </Box>
+            </Box>
       </Modal>
     );
   }
