@@ -97,6 +97,8 @@ const ProfileComponent: React.FC = () => {
             console.log('response.data: ' ,response.data);
             
             setDexData(response.data);
+            
+
         } catch (error) {
             if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
                 // Handle the case where no Pokedex data is found
@@ -112,6 +114,8 @@ const ProfileComponent: React.FC = () => {
 
     useEffect(() => {
         getUserPokeDexData();
+        console.log('Is dexData an array:', Array.isArray(dexData));
+        console.log('dexData before mapping:', dexData);
     }, []); 
 
     // go to selected dex 
@@ -155,7 +159,7 @@ const ProfileComponent: React.FC = () => {
                 <h1 style={{textAlign: 'center', color: "#18447d",}}>{userName}'s Profile</h1>
 
                 {/* load all pokedexs users has  */}
-                {Array.isArray(dexData) && dexData.map((dex, index) => (
+                {dexData.map((dex, index) => (
                     <div key={index} style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         
                         <div style={{justifyContent: 'space-between', display: 'flex',  alignItems: 'center' }}>
