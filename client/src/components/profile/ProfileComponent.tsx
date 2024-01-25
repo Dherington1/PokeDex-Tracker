@@ -25,56 +25,6 @@ const ProfileComponent: React.FC = () => {
 
     // URL for fetches
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
-    
-
-    // const getUserData = async () => {
-    //     try {
-    //         const currentUsername = localStorage.getItem('currentUser');
-    //         const token = localStorage.getItem('token'); 
-    //         const userId= localStorage.getItem('user_id');
-
-    //         // Add token to the Authorization header
-    //         const config = {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`
-    //             }
-    //         };
-
-    //         const response = await axios.get(`${baseUrl}/api/v1/users/allUserData`, config);
-            
-    //         if (response.data && response.data.data && response.data.data.user) {
-    //             setUserID(response.data.data.user._id);
-    //             setUsername(currentUsername);
-    //             getUserPokeDexData(config, response.data.data.user._id);
-    //         } else {
-    //             console.error('Unexpected response structure:', response);
-    //         }
-
-    //         console.log('response.data.data.user: ' , response.data.data.user);
-    //         console.log('response.data.data.user._id: ', response.data.data.user._id);
-            
-    //         setUserID(response.data.data.user._id)
-    //         setUsername(currentUsername);
-            
-    //         get users dex data
-    //         getUserPokeDexData(config, userId);
-            
-    //     } catch (error) {
-    //         console.error("fetch user data error: ", error);
-    //         if (error instanceof Error) {
-    //             console.log("Error message:", error.message);
-
-    //             // If the error is an Axios error
-    //             if (axios.isAxiosError(error)) {
-    //                 console.log("Error response data:", error.response?.data);
-    //                 console.log("Error response status:", error.response?.status);
-    //                 console.log("Error response headers:", error.response?.headers);
-    //             } 
-    //         } else {
-    //             console.log("An unknown error occurred:", error);
-    //         }
-    //     }
-    // }
 
     const getUserPokeDexData = async () => {
         try {
@@ -96,11 +46,13 @@ const ProfileComponent: React.FC = () => {
                     Authorization: `Bearer ${token}`
                 }
             };
-
-            const response = await axios.get(`${baseUrl}/api/v1/pokedex/allUserDexData/${userId}`, config);
-            console.log('response.data: ' ,response.data);
             
-            setDexData(response.data);
+            const response = await axios.get(`${baseUrl}/api/v1/pokedex/allUserDexData/${userId}`, config);
+            console.log('response.data:', response.data);
+            
+            if (response) {
+                setDexData(response.data);
+            }
             
 
         } catch (error) {

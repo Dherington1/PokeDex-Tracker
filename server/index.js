@@ -35,7 +35,14 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-const PORT = process.env.PORT || 8080;
+// routes.
+app.use('/api/v1/users', userRoutes);
+// app.use('/api/v1/pokedex', pokedexRoutes);
+app.use('/api/v1/pokedex', (req, res, next) => {
+    console.log(`Incoming request on ${req.path}`);
+    next();
+}, pokedexRoutes);
+
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/build')));
@@ -45,13 +52,10 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
+const PORT = process.env.PORT || 8080;
+
 // Serve static assets in production
 app.use('/images', express.static(path.join(__dirname, '../client/images')));
-
-// routes.
-app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/pokedex', pokedexRoutes);
-
 
 async function connectToMongo() {
     try {
