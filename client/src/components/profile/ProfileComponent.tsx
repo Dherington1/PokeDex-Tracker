@@ -39,17 +39,37 @@ const ProfileComponent: React.FC = () => {
 
             const response = await axios.get(`${baseUrl}/api/v1/users/allUserData`, config);
             
+            if (response.data && response.data.data && response.data.data.user) {
+                setUserID(response.data.data.user._id);
+                setUsername(currentUsername);
+                getUserPokeDexData(config, response.data.data.user._id);
+            } else {
+                console.error('Unexpected response structure:', response);
+            }
+
             console.log('response.data.data.user: ' , response.data.data.user);
             console.log('response.data.data.user._id: ', response.data.data.user._id);
             
-            setUserID(response.data.data.user._id)
-            setUsername(currentUsername);
+            // setUserID(response.data.data.user._id)
+            // setUsername(currentUsername);
             
             // get users dex data
             getUserPokeDexData(config, response.data.data.user._id);
             
         } catch (error) {
-            console.log("fetch user data error: ", error);
+            console.error("fetch user data error: ", error);
+            if (error instanceof Error) {
+                console.log("Error message:", error.message);
+
+                // If the error is an Axios error
+                if (axios.isAxiosError(error)) {
+                    console.log("Error response data:", error.response?.data);
+                    console.log("Error response status:", error.response?.status);
+                    console.log("Error response headers:", error.response?.headers);
+                } 
+            } else {
+                console.log("An unknown error occurred:", error);
+            }
         }
     }
 
