@@ -58,6 +58,7 @@ exports.allUserDexData = async (req, res) => {
   try {
     // Fetching all UserPokedexes documents related to a specific user
     const userId = req.params.userId; 
+    console.log(userId);
 
     const userDexData = await UserPokedexes.find({ userId: userId }).select('title pokedex totalChecked');
     console.log("userDexData: ", userDexData);
@@ -71,8 +72,8 @@ exports.allUserDexData = async (req, res) => {
     res.status(200).json(userDexData);
 
   } catch (error) {
-    // Handle any other errors
     res.status(500).json({ message: 'An error occurred', error });
+    console.error("An error occurred", { error, stack: error.stack });
   }
 };
 

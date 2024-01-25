@@ -89,6 +89,9 @@ const ProfileComponent: React.FC = () => {
             // Add token to the Authorization header
             const config = {
                 headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0',
                     Authorization: `Bearer ${token}`
                 }
             };
