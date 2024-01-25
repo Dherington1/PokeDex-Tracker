@@ -25,6 +25,7 @@ const ProfileComponent: React.FC = () => {
 
     // URL for fetches
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    
 
     // const getUserData = async () => {
     //     try {
@@ -93,6 +94,8 @@ const ProfileComponent: React.FC = () => {
             };
 
             const response = await axios.get(`${baseUrl}/api/v1/pokedex/allUserDexData/${userId}`, config);
+            console.log('response.data: ' ,response.data);
+            
             setDexData(response.data);
         } catch (error) {
             if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
@@ -102,6 +105,7 @@ const ProfileComponent: React.FC = () => {
                 setDexData([]); 
             } else {
                 console.log("Fetch user Pokedex data error:", error);
+                setDexData([]);
             }
         }
     };
@@ -151,7 +155,7 @@ const ProfileComponent: React.FC = () => {
                 <h1 style={{textAlign: 'center', color: "#18447d",}}>{userName}'s Profile</h1>
 
                 {/* load all pokedexs users has  */}
-                {dexData.map((dex, index) => (
+                {Array.isArray(dexData) && dexData.map((dex, index) => (
                     <div key={index} style={{justifyContent: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         
                         <div style={{justifyContent: 'space-between', display: 'flex',  alignItems: 'center' }}>
