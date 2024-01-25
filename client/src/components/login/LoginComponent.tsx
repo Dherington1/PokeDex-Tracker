@@ -7,18 +7,23 @@ import DarkModeContext from '../../utils/DarkModeContext';
 // MUI
 import Button from '@mui/material/Button';
 import { Container, Box, TextField, Typography } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress'; 
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const darkMode = useContext(DarkModeContext);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     // if user login was good 
     const [okayUser, setOkayUser] =  useState<boolean>(true);
 
     const loginLogic = async () => {
         const baseUrl = process.env.REACT_APP_API_BASE_URL;
         try {
+
+            setIsLoading(true);
             const response = await axios.post(`${baseUrl}/api/v1/users/login`, {
                 username,
                 password,
@@ -36,6 +41,8 @@ const Login: React.FC = () => {
         } catch (error) {
             setOkayUser(false);
             console.error('login failed:', error);
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -142,18 +149,26 @@ const Login: React.FC = () => {
                     </Box>
 
                     {/* button */}
-                    <Button 
-                        variant="contained"   
-                        sx={{
-                            borderRadius: '2px', 
-                            marginTop: '10px',
-                            marginBottom: '15px'
-                        }}
-                        onClick={loginLogic}
-                    >
-                        Login
-                    </Button>
-
+                    {isLoading ? (
+                        <>
+                            <CircularProgress />
+                        </>
+                    ) : (
+                        <>
+                            <Button 
+                                variant="contained"   
+                                sx={{
+                                    borderRadius: '2px', 
+                                    marginTop: '10px',
+                                    marginBottom: '15px'
+                                }}
+                                onClick={loginLogic}
+                            >
+                                Login
+                            </Button>
+                        </>
+                    )}
+                    
                     {/* link to register */}
                     <small> 
                         Don't have an account yet? 

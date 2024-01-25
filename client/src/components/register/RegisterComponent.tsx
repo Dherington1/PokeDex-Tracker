@@ -10,10 +10,12 @@ import DarkModeContext from '../../utils/DarkModeContext';
 // MUI
 import Button from "@mui/material/Button";
 import { Container, Box, TextField, Typography } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress'; 
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const darkMode = useContext(DarkModeContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // set register variables from user
   const [username, setUsername] = useState<string>('');
@@ -249,22 +251,28 @@ const Register: React.FC = () => {
                     </Box>
 
                     {/* button */}
-                    <Button
-                        variant="contained"
-                        sx={{
-                          borderRadius: "2px",
-                          marginTop: "10px",
-                          marginBottom: "15px",
-                        }}
-                        onClick={registerLogic}
-                    >
-                        Register
-                    </Button>
+                    {isLoading ? (
+                        <><CircularProgress /></>
+                    ) : (
+                        <>
+                            <Button 
+                                variant="contained"   
+                                sx={{
+                                    borderRadius: '2px', 
+                                    marginTop: '10px',
+                                    marginBottom: '15px'
+                                }}
+                                onClick={registerLogic}
+                            >
+                                Register
+                            </Button>
+                        </>
+                    )}
 
-                      <small>
+                    <small>
                         Already have an account? 
                         <Link to={"/login"}> Login here!</Link>
-                      </small>
+                    </small>
                 </Box>
             </Container>
     </>
