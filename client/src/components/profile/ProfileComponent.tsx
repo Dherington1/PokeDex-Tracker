@@ -13,7 +13,7 @@ const ProfileComponent: React.FC = () => {
 
     // user info 
     const [userName, setUsername] = useState<String | null>('')
-    const [userID, setUserID] = useState<String>("")
+    const [userID, setUserID] = useState<string | null>("")
 
     // user dex info
     const [dexData, setDexData] = useState<any[]>([]);
@@ -26,56 +26,70 @@ const ProfileComponent: React.FC = () => {
     // URL for fetches
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-    const getUserData = async () => {
+    // const getUserData = async () => {
+    //     try {
+    //         const currentUsername = localStorage.getItem('currentUser');
+    //         const token = localStorage.getItem('token'); 
+    //         const userId= localStorage.getItem('user_id');
+
+    //         // Add token to the Authorization header
+    //         const config = {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         };
+
+    //         const response = await axios.get(`${baseUrl}/api/v1/users/allUserData`, config);
+            
+    //         if (response.data && response.data.data && response.data.data.user) {
+    //             setUserID(response.data.data.user._id);
+    //             setUsername(currentUsername);
+    //             getUserPokeDexData(config, response.data.data.user._id);
+    //         } else {
+    //             console.error('Unexpected response structure:', response);
+    //         }
+
+    //         console.log('response.data.data.user: ' , response.data.data.user);
+    //         console.log('response.data.data.user._id: ', response.data.data.user._id);
+            
+    //         setUserID(response.data.data.user._id)
+    //         setUsername(currentUsername);
+            
+    //         get users dex data
+    //         getUserPokeDexData(config, userId);
+            
+    //     } catch (error) {
+    //         console.error("fetch user data error: ", error);
+    //         if (error instanceof Error) {
+    //             console.log("Error message:", error.message);
+
+    //             // If the error is an Axios error
+    //             if (axios.isAxiosError(error)) {
+    //                 console.log("Error response data:", error.response?.data);
+    //                 console.log("Error response status:", error.response?.status);
+    //                 console.log("Error response headers:", error.response?.headers);
+    //             } 
+    //         } else {
+    //             console.log("An unknown error occurred:", error);
+    //         }
+    //     }
+    // }
+
+    const getUserPokeDexData = async () => {
         try {
             const currentUsername = localStorage.getItem('currentUser');
             const token = localStorage.getItem('token'); 
+            const userId= localStorage.getItem('user_id');
+            setUserID(userId)
             // Add token to the Authorization header
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             };
+            setUsername(currentUsername);
 
-            const response = await axios.get(`${baseUrl}/api/v1/users/allUserData`, config);
-            
-            if (response.data && response.data.data && response.data.data.user) {
-                setUserID(response.data.data.user._id);
-                setUsername(currentUsername);
-                getUserPokeDexData(config, response.data.data.user._id);
-            } else {
-                console.error('Unexpected response structure:', response);
-            }
-
-            console.log('response.data.data.user: ' , response.data.data.user);
-            console.log('response.data.data.user._id: ', response.data.data.user._id);
-            
-            // setUserID(response.data.data.user._id)
-            // setUsername(currentUsername);
-            
-            // get users dex data
-            getUserPokeDexData(config, response.data.data.user._id);
-            
-        } catch (error) {
-            console.error("fetch user data error: ", error);
-            if (error instanceof Error) {
-                console.log("Error message:", error.message);
-
-                // If the error is an Axios error
-                if (axios.isAxiosError(error)) {
-                    console.log("Error response data:", error.response?.data);
-                    console.log("Error response status:", error.response?.status);
-                    console.log("Error response headers:", error.response?.headers);
-                } 
-            } else {
-                console.log("An unknown error occurred:", error);
-            }
-        }
-    }
-
-    const getUserPokeDexData = async (config: object, userID: String) => {
-        try {
-            const response = await axios.get(`${baseUrl}/api/v1/pokedex/allUserDexData/${userID}`, config);
+            const response = await axios.get(`${baseUrl}/api/v1/pokedex/allUserDexData/${userId}`, config);
             setDexData(response.data);
         } catch (error) {
             if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
@@ -89,7 +103,7 @@ const ProfileComponent: React.FC = () => {
     };
 
     useEffect(() => {
-        getUserData();
+        getUserPokeDexData();
     }, []); 
 
     // go to selected dex 
@@ -105,6 +119,7 @@ const ProfileComponent: React.FC = () => {
         marginTop: '12px'
     });
 
+    // delete a dex entry
     const deleteDex = async (objectNumber: String) => {
         console.log(objectNumber);
         try {
@@ -118,7 +133,7 @@ const ProfileComponent: React.FC = () => {
             const response = await axios.delete(`${baseUrl}/api/v1/pokedex/deleteDexEntry/${objectNumber}`, config);
             console.log('response for delete data' , response.data);
     
-            getUserData();
+            getUserPokeDexData();
         } catch (err) {
             console.error('Error deleting dex entry:', err);
         }
@@ -185,6 +200,7 @@ const ProfileComponent: React.FC = () => {
            </Container>
 
            <BasicModal open={open} handleClose={handleClose} userID={userID}/>
+           
         </>
     );
 }

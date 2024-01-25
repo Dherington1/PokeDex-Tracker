@@ -28,16 +28,21 @@ const style = {
 interface BasicModalProps {
   open: boolean;
   handleClose: () => void;
-  userID: String; 
+  userID: string | null;
 }
 
 export default function BasicModal({ open, handleClose, userID }: BasicModalProps) {
     const darkMode = useContext(DarkModeContext);
     const [generationNumber, setGenerationNumber] = useState<number | null>(null);
-    const [title, setTitle] = useState<String>("")
+    const [title, setTitle] = useState<string>("")
 
     // logic for adding fetch call to create new dex
-    const addGeneration = async (userId: String, generationNumber: number | null) => {
+    const addGeneration = async (userId: string | null, generationNumber: number | null) => {
+
+      if (userId === null || generationNumber === null) {
+        console.error("UserID or GenerationNumber is null");
+        return; 
+      }
 
       const baseUrl = process.env.REACT_APP_API_BASE_URL;
         try {
