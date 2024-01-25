@@ -12,7 +12,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 const ProfileComponent: React.FC = () => {
 
     // user info 
-    const [userName, setUsername] = useState<String | null>('')
+    const [userName, setUsername] = useState<string | null>('')
     const [userID, setUserID] = useState<string | null>("")
 
     // user dex info
@@ -80,14 +80,17 @@ const ProfileComponent: React.FC = () => {
             const currentUsername = localStorage.getItem('currentUser');
             const token = localStorage.getItem('token'); 
             const userId= localStorage.getItem('user_id');
+
+            // set values to states
             setUserID(userId)
+            setUsername(currentUsername);
+
             // Add token to the Authorization header
             const config = {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             };
-            setUsername(currentUsername);
 
             const response = await axios.get(`${baseUrl}/api/v1/pokedex/allUserDexData/${userId}`, config);
             setDexData(response.data);
@@ -95,7 +98,8 @@ const ProfileComponent: React.FC = () => {
             if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
                 // Handle the case where no Pokedex data is found
                 console.log("No Pokedex data found for user:", userID);
-                setDexData([]); // Set the state to an empty array to indicate no data
+                // Set the state to an empty array to indicate no data
+                setDexData([]); 
             } else {
                 console.log("Fetch user Pokedex data error:", error);
             }
