@@ -252,7 +252,14 @@ const Register: React.FC = () => {
 
                     {/* button */}
                     {isLoading ? (
-                        <><CircularProgress /></>
+                        <>
+                            <CircularProgress  
+                                sx={{
+                                    marginTop: '10px',
+                                    marginBottom: '15px'
+                                }}
+                            />
+                        </>
                     ) : (
                         <>
                             <Button 

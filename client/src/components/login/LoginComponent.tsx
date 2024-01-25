@@ -151,7 +151,12 @@ const Login: React.FC = () => {
                     {/* button */}
                     {isLoading ? (
                         <>
-                            <CircularProgress />
+                            <CircularProgress  
+                                sx={{
+                                    marginTop: '10px',
+                                    marginBottom: '15px'
+                                }}
+                            />
                         </>
                     ) : (
                         <>
@@ -168,7 +173,7 @@ const Login: React.FC = () => {
                             </Button>
                         </>
                     )}
-                    
+
                     {/* link to register */}
                     <small> 
                         Don't have an account yet? 
