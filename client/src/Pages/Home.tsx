@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   const backgroundStyle: React.CSSProperties = {
@@ -74,7 +73,10 @@ useEffect(() => {
 
   return (
     <>
-     <div style={backgroundStyle}></div>
+     <div 
+      style={backgroundStyle} 
+      className='background-style'
+     ></div>
      <Container 
       component="main" 
       maxWidth="sm" 

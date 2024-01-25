@@ -28,6 +28,31 @@
   color: #61dafb;
 }
 
+.background-small-screen {
+  background-size: contain; 
+}
+
+/* .background-style {
+  background-image: url('/halloween.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgb(255, 217, 36);
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+@media (max-width: 430px) {
+  .background-style {
+    background-size: contain;
+      
+  }
+} */
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
